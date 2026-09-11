@@ -1,0 +1,6 @@
+{
+  "name": "Календарь Контента - 12 Месяцев",
+  "description": "Лендинг для планирования контент-стратегии с 12-месячной круговой диаграммой, детальным календарём, цветовой кодировкой тегов и экспортом в PDF.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

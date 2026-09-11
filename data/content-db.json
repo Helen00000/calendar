@@ -1,0 +1,1851 @@
+[
+  {
+    "index": 0,
+    "year": 2026,
+    "name": "Январь",
+    "shortName": "ЯНВ",
+    "season": "winter",
+    "focusTopic": "Call for Papers и Открытие сезона",
+    "goal": "Подготовка и прогрев к весенним конференциям",
+    "items": []
+  },
+  {
+    "index": 1,
+    "year": 2026,
+    "name": "Февраль",
+    "shortName": "ФЕВ",
+    "season": "winter",
+    "focusTopic": "Программные комитеты & Early Bird",
+    "goal": "Продажи ранних билетов и работа со спикерами",
+    "items": []
+  },
+  {
+    "index": 2,
+    "year": 2026,
+    "name": "Март",
+    "shortName": "МАР",
+    "season": "spring",
+    "focusTopic": "TechWriter Days 3 (Москва, 27–28 марта)",
+    "goal": "Проведение TechWriter Days 3 и анонсы спикеров",
+    "items": []
+  },
+  {
+    "index": 3,
+    "year": 2026,
+    "name": "Апрель",
+    "shortName": "АПР",
+    "season": "spring",
+    "focusTopic": "SQA Days 38 (СПб, 24–25 апреля)",
+    "goal": "Проведение SQA Days 38 и финальные анонсы",
+    "items": []
+  },
+  {
+    "index": 4,
+    "year": 2026,
+    "name": "Май",
+    "shortName": "МАЙ",
+    "season": "spring",
+    "focusTopic": "Analyst Days 22 (СПб, 22–23 мая)",
+    "goal": "Проведение Analyst Days 22 и освещение докладов",
+    "items": []
+  },
+  {
+    "index": 5,
+    "year": 2026,
+    "name": "Июнь",
+    "shortName": "ИЮН",
+    "season": "summer",
+    "focusTopic": "Материалы весенних конф & Итоги",
+    "goal": "Публикация записей и презентаций",
+    "items": []
+  },
+  {
+    "index": 6,
+    "year": 2026,
+    "name": "Июль",
+    "shortName": "ИЮЛ",
+    "season": "summer",
+    "focusTopic": "Летний ИТ-Нетворкинг & CFP Осень",
+    "goal": "Приём заявок на осенние SQA 39 и Analyst Days 23",
+    "items": []
+  },
+  {
+    "index": 7,
+    "year": 2026,
+    "name": "Август",
+    "shortName": "АВГ",
+    "season": "summer",
+    "focusTopic": "Анонс осенней программы и Early Bird",
+    "goal": "Продажи билетов на осенние конференции",
+    "items": []
+  },
+  {
+    "index": 8,
+    "year": 2026,
+    "name": "Сентябрь",
+    "shortName": "СЕН",
+    "season": "autumn",
+    "focusTopic": "Финал прогонов докладов и анонс программы SQA Days 39",
+    "goal": "Продажи билетов и прогрев аудитории перед конференцией",
+    "items": [
+      {
+        "id": "sqa-sep-001",
+        "title": "📧 Готова программа SQA Days 39!",
+        "tags": ["email", "social"],
+        "tag": "email",
+        "conference": "SQA",
+        "day": 11,
+        "time": "10:00",
+        "status": "scheduled",
+        "description": "Рассылка для ЛПР и участников. Анонс секций, спикеров и ссылка на регистрацию."
+      },
+      {
+        "id": "sqa-sep-004",
+        "title": "📈 Повышение цен на билеты SQA Days 39",
+        "tags": ["social"],
+        "tag": "social",
+        "conference": "SQA",
+        "day": 25,
+        "time": "10:00",
+        "status": "scheduled",
+        "description": "Ежемесячный пост 24 числа. Напоминание о выгоде ранней покупки."
+      },
+      {
+        "id": "sqa-sep-005",
+        "title": "IT-мемы про тестирование и дедлайны",
+        "tags": ["social", "reels"],
+        "tag": "social",
+        "conference": "SQA",
+        "day": 16,
+        "time": "18:00",
+        "status": "scheduled",
+        "description": "Легкий контент для вовлечения перед конференцией. Подборка мемов."
+      },
+      {
+        "id": "post-1788777382557-636",
+        "title": "День Тестировщика",
+        "tags": ["social", "video"],
+        "tag": "social",
+        "conference": "SQA",
+        "day": 9,
+        "time": "12:00",
+        "status": "scheduled",
+        "description": "С нарезкой из интервью"
+      },
+      {
+        "id": "post-1788782322645-602",
+        "title": "Доклады с прошлой конфы",
+        "conference": "SQA",
+        "tags": ["social", "article"],
+        "day": 22,
+        "time": "12:00",
+        "status": "scheduled",
+        "description": ""
+      },
+      {
+        "id": "post-1788782346058-518",
+        "title": "Доклады с прошлой конфы",
+        "conference": "SQA",
+        "tags": ["social", "article"],
+        "day": 15,
+        "time": "12:00",
+        "status": "scheduled",
+        "description": ""
+      },
+      {
+        "id": "post-1788782351792-848",
+        "title": "Доклады с прошлой конфы",
+        "conference": "SQA",
+        "tags": ["social", "article"],
+        "day": 8,
+        "time": "12:00",
+        "status": "scheduled",
+        "description": ""
+      },
+      {
+        "id": "post-1788782356843-585",
+        "title": "Доклады с прошлой конфы",
+        "conference": "SQA",
+        "tags": ["social", "article"],
+        "day": 29,
+        "time": "12:00",
+        "status": "scheduled",
+        "description": ""
+      },
+      {
+        "id": "ad-sep-wed-02",
+        "title": "Доклады с прошлой конфы",
+        "conference": "AD",
+        "tags": ["social", "article"],
+        "day": 2,
+        "time": "12:00",
+        "status": "scheduled",
+        "description": "Строго каждую среду"
+      },
+      {
+        "id": "ad-sep-wed-09",
+        "title": "Доклады с прошлой конфы",
+        "conference": "AD",
+        "tags": ["social", "article"],
+        "day": 9,
+        "time": "12:00",
+        "status": "scheduled",
+        "description": "Строго каждую среду"
+      },
+      {
+        "id": "ad-sep-001",
+        "title": "📧 Остался месяц приёма заявок! Гайд по подготовке доклада",
+        "conference": "AD",
+        "tags": ["email", "article"],
+        "day": 15,
+        "time": "10:00",
+        "status": "scheduled",
+        "description": "За 1 месяц до дедлайна CFP на AD 23."
+      },
+      {
+        "id": "ad-sep-wed-16",
+        "title": "Доклады с прошлой конфы",
+        "conference": "AD",
+        "tags": ["social", "article"],
+        "day": 16,
+        "time": "12:00",
+        "status": "scheduled",
+        "description": "Строго каждую среду"
+      },
+      {
+        "id": "ad-sep-wed-23",
+        "title": "Доклады с прошлой конфы",
+        "conference": "AD",
+        "tags": ["social", "article"],
+        "day": 23,
+        "time": "12:00",
+        "status": "scheduled",
+        "description": "Строго каждую среду"
+      },
+      {
+        "id": "ad-sep-002",
+        "title": "📈 Повышение цен на билеты Analyst Days 23",
+        "conference": "AD",
+        "tags": ["social"],
+        "day": 25,
+        "time": "10:00",
+        "status": "scheduled",
+        "description": "Регулярное повышение цен на AD."
+      },
+      {
+        "id": "ad-sep-wed-30",
+        "title": "Доклады с прошлой конфы",
+        "conference": "AD",
+        "tags": ["social", "article"],
+        "day": 30,
+        "time": "12:00",
+        "status": "scheduled",
+        "description": "Строго каждую среду"
+      }
+    ]
+  },
+  {
+    "index": 9,
+    "year": 2026,
+    "name": "Октябрь",
+    "shortName": "ОКТ",
+    "season": "autumn",
+    "focusTopic": "SQA Days 39 (Москва, 30–31 октября)",
+    "goal": "Максимальная явка и освещение события в реальном времени",
+    "items": [
+      {
+        "id": "sqa-oct-001",
+        "title": "📧 Дайджест: топ 5 интересных докладов на конференции SQA Days 39",
+        "tags": ["email", "social", "article"],
+        "tag": "email",
+        "conference": "SQA",
+        "day": 1,
+        "time": "10:00",
+        "status": "scheduled",
+        "description": "контент на основе сентябрьской статьи с призывом прийти на конфу"
+      },
+      {
+        "id": "sqa-oct-002",
+        "title": "📝 Почему стоит ходить на профильные конференции (SQA Days)",
+        "tags": ["article"],
+        "tag": "article",
+        "conference": "SQA",
+        "day": 9,
+        "time": "12:00",
+        "status": "scheduled",
+        "description": "Экспертная статья о пользе нетворкинга, обмена опытом и карьерного роста."
+      },
+      {
+        "id": "sqa-oct-004",
+        "title": "📧 Письмо участникам SQA Days 39 с полезной информацией",
+        "tags": ["email"],
+        "tag": "email",
+        "conference": "SQA",
+        "day": 29,
+        "time": "10:00",
+        "status": "scheduled",
+        "description": "Логистика, карта площадки, Wi-Fi, расписание и ссылки на чаты."
+      },
+      {
+        "id": "sqa-oct-005",
+        "title": "🎬 День 1: SQA Days 39 и атмосфера",
+        "tags": ["reels", "video", "social"],
+        "tag": "reels",
+        "conference": "SQA",
+        "day": 30,
+        "time": "11:00",
+        "status": "scheduled",
+        "description": "Stories в ТГ/ВК + Reels/Shorts. Живые кадры регистрации, открытия и первых докладов."
+      },
+      {
+        "id": "sqa-oct-006",
+        "title": "🎥  День 2: SQA Days 39 и атмосфера",
+        "tags": ["reels", "video", "social"],
+        "tag": "reels",
+        "conference": "SQA",
+        "day": 31,
+        "time": "15:00",
+        "status": "scheduled",
+        "description": "Блиц-опросы на конференции. Съемка для будущего контента."
+      },
+      {
+        "id": "post-1788777631223-368",
+        "title": "Всего неделя до конфы, приходите! что вас ждет:",
+        "tags": ["social", "email"],
+        "tag": "social",
+        "conference": "SQA",
+        "day": 23,
+        "time": "12:00",
+        "status": "scheduled",
+        "description": "Сегмент: те кто еще не приобрел билет"
+      },
+      {
+        "id": "post-1788780030645-799",
+        "title": "Акция: окно удачи",
+        "conference": "SQA",
+        "tags": ["social"],
+        "day": 21,
+        "time": "12:00",
+        "status": "scheduled",
+        "description": ""
+      },
+      {
+        "id": "post-1788782366876-86",
+        "title": "Доклады с прошлой конфы",
+        "conference": "SQA",
+        "tags": ["social"],
+        "day": 6,
+        "time": "12:00",
+        "status": "scheduled",
+        "description": ""
+      },
+      {
+        "id": "post-1788782370491-975",
+        "title": "Доклады с прошлой конфы",
+        "conference": "SQA",
+        "tags": ["social"],
+        "day": 13,
+        "time": "12:00",
+        "status": "scheduled",
+        "description": ""
+      },
+      {
+        "id": "post-1788782410791-297",
+        "title": "Пост про победителей",
+        "conference": "SQA",
+        "tags": ["social", "video"],
+        "day": 31,
+        "time": "12:00",
+        "status": "scheduled",
+        "description": ""
+      },
+      {
+        "id": "post-1788785257461-766",
+        "title": "Доклады с прошлой конфы",
+        "conference": "SQA",
+        "tags": ["social", "article"],
+        "day": 20,
+        "time": "12:00",
+        "status": "scheduled",
+        "description": ""
+      },
+      {
+        "id": "ad-oct-001",
+        "title": "📝 Отзывы от ПК, участников, докладчиков",
+        "conference": "AD",
+        "tags": ["article", "social"],
+        "day": 2,
+        "time": "12:00",
+        "status": "scheduled",
+        "description": "За 7 недель до Analyst Days 23, на этапе прогрева."
+      },
+      {
+        "id": "ad-oct-wed-07",
+        "title": "Доклады с прошлой конфы",
+        "conference": "AD",
+        "tags": ["social", "article"],
+        "day": 7,
+        "time": "12:00",
+        "status": "scheduled",
+        "description": "Строго каждую среду"
+      },
+      {
+        "id": "ad-oct-002",
+        "title": "📧 Готова программа Analyst Days 23!",
+        "conference": "AD",
+        "tags": ["email", "social"],
+        "day": 9,
+        "time": "10:00",
+        "status": "scheduled",
+        "description": "За 6 недель до конференции."
+      },
+      {
+        "id": "ad-oct-wed-14",
+        "title": "Доклады с прошлой конфы",
+        "conference": "AD",
+        "tags": ["social", "article"],
+        "day": 14,
+        "time": "12:00",
+        "status": "scheduled",
+        "description": "Строго каждую среду"
+      },
+      {
+        "id": "ad-oct-003",
+        "title": "IT-мемы про аналитику и дедлайны",
+        "conference": "AD",
+        "tags": ["social"],
+        "day": 15,
+        "time": "12:00",
+        "status": "scheduled",
+        "description": "Разовый развлекательный контент в период прогрева."
+      },
+      {
+        "id": "ad-oct-004",
+        "title": "💬 Делимся радостью с ЛПР",
+        "conference": "AD",
+        "tags": ["telegram"],
+        "day": 20,
+        "time": "12:00",
+        "status": "scheduled",
+        "description": "Сводка опубликованных спикеров."
+      },
+      {
+        "id": "ad-oct-wed-21",
+        "title": "Доклады с прошлой конфы",
+        "conference": "AD",
+        "tags": ["social", "article"],
+        "day": 21,
+        "time": "12:00",
+        "status": "scheduled",
+        "description": "Строго каждую среду"
+      },
+      {
+        "id": "ad-oct-005",
+        "title": "📈 Повышение цен на билеты Analyst Days 23",
+        "conference": "AD",
+        "tags": ["social"],
+        "day": 25,
+        "time": "10:00",
+        "status": "scheduled",
+        "description": "Ежемесячный пост повышения цен."
+      },
+      {
+        "id": "ad-oct-006",
+        "title": "📧 Дайджест: топ-5 интересных докладов Analyst Days 23",
+        "conference": "AD",
+        "tags": ["email"],
+        "day": 28,
+        "time": "10:00",
+        "status": "scheduled",
+        "description": "За 3-4 недели до конференции."
+      },
+      {
+        "id": "ad-oct-wed-28",
+        "title": "Доклады с прошлой конфы",
+        "conference": "AD",
+        "tags": ["social", "article"],
+        "day": 28,
+        "time": "12:00",
+        "status": "scheduled",
+        "description": "Строго каждую среду"
+      },
+      {
+        "id": "ad-oct-007",
+        "title": "📝 Что нужно, чтобы классно провести время на конфе",
+        "conference": "AD",
+        "tags": ["article", "social"],
+        "day": 29,
+        "time": "12:00",
+        "status": "scheduled",
+        "description": "За 3 недели до Analyst Days."
+      },
+      {
+        "id": "ad-oct-008",
+        "title": "📝 Почему стоит ходить на профильные конференции",
+        "conference": "AD",
+        "tags": ["article", "social"],
+        "day": 30,
+        "time": "12:00",
+        "status": "scheduled",
+        "description": "За 3 недели до конференции."
+      }
+    ]
+  },
+  {
+    "index": 10,
+    "year": 2026,
+    "name": "Ноябрь",
+    "shortName": "НОЯ",
+    "season": "autumn",
+    "focusTopic": "Итоги SQA 39 и старт CFP на SQA 40",
+    "goal": "Сбор обратной связи и запуск приема заявок от спикеров",
+    "items": [
+      {
+        "id": "sqa-nov-001",
+        "title": "Доступы к видео + заполняй анкету ОС",
+        "tags": ["email"],
+        "tag": "email",
+        "conference": "SQA",
+        "day": 6,
+        "time": "10:00",
+        "status": "scheduled",
+        "description": "Рассылка участникам"
+      },
+      {
+        "id": "sqa-nov-002",
+        "title": "Открыт прием заявок на SQA Days 40!",
+        "tags": ["email", "telegram", "social", "video"],
+        "tag": "email",
+        "conference": "SQA",
+        "day": 10,
+        "time": "11:00",
+        "status": "scheduled",
+        "description": "Анонс CFP для участников, ЛПР и компаний. Ссылка на форму подачи."
+      },
+      {
+        "id": "sqa-nov-003",
+        "title": "🎥 Статистика SQA Days 39 в цифрах",
+        "tags": ["video", "social"],
+        "tag": "video",
+        "conference": "SQA",
+        "day": 16,
+        "time": "12:00",
+        "status": "scheduled",
+        "description": "Итоги в инфографике/видео: сколько участников, спикеров, городов. Призыв присоединяться к комьюнити."
+      },
+      {
+        "id": "sqa-nov-004",
+        "title": "🎬 Нарезки из интервью: главные инсайты с конфы",
+        "tags": ["reels", "video"],
+        "tag": "reels",
+        "conference": "SQA",
+        "day": 26,
+        "time": "12:00",
+        "status": "scheduled",
+        "description": "Динамичные короткие ролики (которые снимем на конфе)."
+      },
+      {
+        "id": "post-1788422020755-734",
+        "title": "Давайте вспомним как это было + пополнение стикерпака",
+        "tags": ["social", "video"],
+        "tag": "social",
+        "conference": "SQA",
+        "day": 2,
+        "time": "12:00",
+        "status": "scheduled",
+        "description": "краткий обзорный ролик + стикер"
+      },
+      {
+        "id": "post-1788778085360-266",
+        "title": "Повышение цен",
+        "conference": "SQA",
+        "tags": ["social"],
+        "day": 27,
+        "time": "12:00",
+        "status": "scheduled",
+        "description": ""
+      },
+      {
+        "id": "ad-nov-wed-04",
+        "title": "Доклады с прошлой конфы",
+        "conference": "AD",
+        "tags": ["social", "article"],
+        "day": 4,
+        "time": "12:00",
+        "status": "scheduled",
+        "description": "Строго каждую среду"
+      },
+      {
+        "id": "ad-nov-001",
+        "title": "Акция «Окно удачи»",
+        "conference": "AD",
+        "tags": ["social", "email"],
+        "day": 11,
+        "time": "12:00",
+        "status": "scheduled",
+        "description": "За 9 дней до AD 23."
+      },
+      {
+        "id": "ad-nov-wed-11",
+        "title": "Доклады с прошлой конфы",
+        "conference": "AD",
+        "tags": ["social", "article"],
+        "day": 11,
+        "time": "15:00",
+        "status": "scheduled",
+        "description": "Строго каждую среду"
+      },
+      {
+        "id": "ad-nov-002",
+        "title": "Всего неделя до конференции, приходите!",
+        "conference": "AD",
+        "tags": ["social", "email"],
+        "day": 13,
+        "time": "12:00",
+        "status": "scheduled",
+        "description": "Ровно за 7 дней до конференции."
+      },
+      {
+        "id": "ad-nov-wed-18",
+        "title": "Доклады с прошлой конфы",
+        "conference": "AD",
+        "tags": ["social", "article"],
+        "day": 18,
+        "time": "12:00",
+        "status": "scheduled",
+        "description": "Строго каждую среду"
+      },
+      {
+        "id": "ad-nov-003",
+        "title": "📧 Письмо участникам Analyst Days 23 с полезной информацией",
+        "conference": "AD",
+        "tags": ["email"],
+        "day": 19,
+        "time": "10:00",
+        "status": "scheduled",
+        "description": "Логистика, карта, Wi-Fi. За 1 день до конфы."
+      },
+      {
+        "id": "ad-nov-004",
+        "title": "🎬 День 1: атмосфера конференции Analyst Days 23",
+        "conference": "AD",
+        "tags": ["reels", "social"],
+        "day": 20,
+        "time": "12:00",
+        "status": "scheduled",
+        "description": "В первый день конференции."
+      },
+      {
+        "id": "ad-nov-005",
+        "title": "🎥 День 2: атмосфера конференции Analyst Days 23",
+        "conference": "AD",
+        "tags": ["reels", "social"],
+        "day": 21,
+        "time": "12:00",
+        "status": "scheduled",
+        "description": "Во второй день конференции."
+      },
+      {
+        "id": "ad-nov-006",
+        "title": "Пост про победителей Analyst Days",
+        "conference": "AD",
+        "tags": ["social"],
+        "day": 21,
+        "time": "16:00",
+        "status": "scheduled",
+        "description": "В последний день конференции."
+      },
+      {
+        "id": "ad-nov-007",
+        "title": "🎬 Давайте вспомним, как это было (Analyst Days)",
+        "conference": "AD",
+        "tags": ["video", "social"],
+        "day": 23,
+        "time": "12:00",
+        "status": "scheduled",
+        "description": "Краткий обзорный ролик + стикерпак через 2 дня после."
+      },
+      {
+        "id": "ad-nov-008",
+        "title": "📈 Повышение цен на билеты",
+        "conference": "AD",
+        "tags": ["social"],
+        "day": 25,
+        "time": "10:00",
+        "status": "scheduled",
+        "description": "Ежемесячный пост повышения цен."
+      },
+      {
+        "id": "ad-nov-wed-25",
+        "title": "Доклады с прошлой конфы",
+        "conference": "AD",
+        "tags": ["social", "article"],
+        "day": 25,
+        "time": "12:00",
+        "status": "scheduled",
+        "description": "Строго каждую среду"
+      },
+      {
+        "id": "ad-nov-009",
+        "title": "📧 Доступы к видеозаписям + анкета обратной связи (AD)",
+        "conference": "AD",
+        "tags": ["email"],
+        "day": 28,
+        "time": "10:00",
+        "status": "scheduled",
+        "description": "Через 5-10 дней после конференции."
+      }
+    ]
+  },
+  {
+    "index": 11,
+    "year": 2026,
+    "name": "Декабрь",
+    "shortName": "ДЕК",
+    "season": "winter",
+    "focusTopic": "Поддержка спикеров и итоги года",
+    "goal": "Помощь в подготовке докладов и подведение годовых итогов",
+    "items": [
+      {
+        "id": "sqa-dec-001",
+        "title": "📧 Остался месяц приема заявок! Вот как подготовиться к докладу",
+        "tags": ["email", "social", "article"],
+        "tag": "email",
+        "conference": "SQA",
+        "day": 10,
+        "time": "10:00",
+        "status": "scheduled",
+        "description": "Рассылка для потенциальных докладчиков. Гайд по структуре и оформлению заявки."
+      },
+      {
+        "id": "sqa-dec-002",
+        "title": "🎬 Полный обзорный ролик: Давайте вспомним, как это было",
+        "tags": ["video", "reels", "social"],
+        "tag": "video",
+        "conference": "SQA",
+        "day": 17,
+        "time": "12:00",
+        "status": "scheduled",
+        "description": "Интервью"
+      },
+      {
+        "id": "sqa-dec-003",
+        "title": "📈 Повышение цен на билеты SQA Days 40",
+        "tags": ["social"],
+        "tag": "social",
+        "conference": "SQA",
+        "day": 24,
+        "time": "10:00",
+        "status": "scheduled",
+        "description": "Ежемесячный пост 24 числа. Напоминание о раннем бронировании."
+      },
+      {
+        "id": "post-1788422189407-688",
+        "title": "С новым годом!",
+        "tags": ["social", "video"],
+        "tag": "social",
+        "conference": "SQA",
+        "day": 31,
+        "time": "12:00",
+        "status": "scheduled",
+        "description": ""
+      },
+      {
+        "id": "post-1788782602619-462",
+        "title": "Доклады с прошлой конфы",
+        "conference": "SQA",
+        "tags": ["social", "article"],
+        "day": 8,
+        "time": "12:00",
+        "status": "scheduled",
+        "description": ""
+      },
+      {
+        "id": "post-1788782606204-175",
+        "title": "Доклады с прошлой конфы",
+        "conference": "SQA",
+        "tags": ["social", "article"],
+        "day": 15,
+        "time": "12:00",
+        "status": "scheduled",
+        "description": ""
+      },
+      {
+        "id": "post-1788782612386-786",
+        "title": "Доклады с прошлой конфы",
+        "conference": "SQA",
+        "tags": ["social", "article"],
+        "day": 22,
+        "time": "12:00",
+        "status": "scheduled",
+        "description": ""
+      },
+      {
+        "id": "post-1788782621054-441",
+        "title": "Доклады с прошлой конфы",
+        "conference": "SQA",
+        "tags": ["social", "article"],
+        "day": 29,
+        "time": "12:00",
+        "status": "scheduled",
+        "description": ""
+      },
+      {
+        "id": "ad-dec-001",
+        "title": "📧 Открыт приём заявок (CFP) на Analyst Days 24",
+        "conference": "AD",
+        "tags": ["email", "social"],
+        "day": 1,
+        "time": "10:00",
+        "status": "scheduled",
+        "description": "Через 10 дней после завершения Analyst Days 23."
+      },
+      {
+        "id": "ad-dec-wed-02",
+        "title": "Доклады с прошлой конфы",
+        "conference": "AD",
+        "tags": ["social", "article"],
+        "day": 2,
+        "time": "12:00",
+        "status": "scheduled",
+        "description": "Строго каждую среду"
+      },
+      {
+        "id": "ad-dec-wed-09",
+        "title": "Доклады с прошлой конфы",
+        "conference": "AD",
+        "tags": ["social", "article"],
+        "day": 9,
+        "time": "12:00",
+        "status": "scheduled",
+        "description": "Строго каждую среду"
+      },
+      {
+        "id": "ad-dec-002",
+        "title": "🎥 Статистика конференции в цифрах",
+        "conference": "AD",
+        "tags": ["video", "social"],
+        "day": 10,
+        "time": "12:00",
+        "status": "scheduled",
+        "description": "Инфографика через 2-3 недели после AD 23."
+      },
+      {
+        "id": "ad-dec-wed-16",
+        "title": "Доклады с прошлой конфы",
+        "conference": "AD",
+        "tags": ["social", "article"],
+        "day": 16,
+        "time": "12:00",
+        "status": "scheduled",
+        "description": "Строго каждую среду"
+      },
+      {
+        "id": "ad-dec-003",
+        "title": "🎬 Нарезки из интервью: главные инсайты",
+        "conference": "AD",
+        "tags": ["reels", "video"],
+        "day": 18,
+        "time": "12:00",
+        "status": "scheduled",
+        "description": "Через ~4 недели после конференции AD 23."
+      },
+      {
+        "id": "ad-dec-wed-23",
+        "title": "Доклады с прошлой конфы",
+        "conference": "AD",
+        "tags": ["social", "article"],
+        "day": 23,
+        "time": "12:00",
+        "status": "scheduled",
+        "description": "Строго каждую среду"
+      },
+      {
+        "id": "ad-dec-004",
+        "title": "📈 Повышение цен на билеты Analyst Days 24",
+        "conference": "AD",
+        "tags": ["social"],
+        "day": 25,
+        "time": "10:00",
+        "status": "scheduled",
+        "description": "Ежемесячный пост 25 числа."
+      },
+      {
+        "id": "ad-dec-wed-30",
+        "title": "Доклады с прошлой конфы",
+        "conference": "AD",
+        "tags": ["social", "article"],
+        "day": 30,
+        "time": "12:00",
+        "status": "scheduled",
+        "description": "Строго каждую среду"
+      },
+      {
+        "id": "ad-dec-005",
+        "title": "С Новым годом!",
+        "conference": "AD",
+        "tags": ["social", "video"],
+        "day": 31,
+        "time": "12:00",
+        "status": "scheduled",
+        "description": "Поздравление для комьюнити."
+      }
+    ]
+  },
+  {
+    "index": 0,
+    "year": 2027,
+    "name": "Январь",
+    "shortName": "ЯНВ",
+    "season": "winter",
+    "focusTopic": "Новый год и финальный шанс подать доклад",
+    "goal": "Добор сильных спикеров и новогодний прогрев",
+    "items": [
+      {
+        "id": "sqa-jan-003",
+        "title": "🎬 Каким грейдам будет полезна конференция?",
+        "tags": ["reels", "video", "article"],
+        "tag": "reels",
+        "conference": "SQA",
+        "day": 20,
+        "time": "12:00",
+        "status": "scheduled",
+        "description": "Нарезка из интервью на конфе: 'Конфа и для джуна, и для сеньера, каждый найдет свое'. + статья в интернете"
+      },
+      {
+        "id": "sqa-jan-004",
+        "title": "📈 Повышение цен на билеты SQA Days 40",
+        "tags": ["social"],
+        "tag": "social",
+        "conference": "SQA",
+        "day": 25,
+        "time": "10:00",
+        "status": "scheduled",
+        "description": "Ежемесячный пост 24 числа."
+      },
+      {
+        "id": "post-1788422222543-458",
+        "title": "Мем - рабочее настроение после праздников",
+        "tags": ["social"],
+        "tag": "social",
+        "conference": "SQA",
+        "day": 11,
+        "time": "12:00",
+        "status": "scheduled",
+        "description": "а как вы вливаетесь в рабочий процесс?"
+      },
+      {
+        "id": "post-1788780157625-894",
+        "title": "HH парс",
+        "conference": "SQA",
+        "tags": ["email"],
+        "day": 28,
+        "time": "12:00",
+        "status": "scheduled",
+        "description": ""
+      },
+      {
+        "id": "post-1788780658953-691",
+        "title": "Делимся радостью с ЛПР",
+        "conference": "SQA",
+        "tags": ["telegram"],
+        "day": 14,
+        "time": "12:00",
+        "status": "scheduled",
+        "description": "присылаем сводку спикеров кто подал заявки"
+      },
+      {
+        "id": "post-1788782635954-82",
+        "title": "Доклады с прошлой конфы",
+        "conference": "SQA",
+        "tags": ["social", "article"],
+        "day": 5,
+        "time": "12:00",
+        "status": "scheduled",
+        "description": ""
+      },
+      {
+        "id": "post-1788782648904-339",
+        "title": "Доклады с прошлой конфы",
+        "conference": "SQA",
+        "tags": ["social", "article"],
+        "day": 12,
+        "time": "12:00",
+        "status": "scheduled",
+        "description": ""
+      },
+      {
+        "id": "post-1788782652601-293",
+        "title": "Доклады с прошлой конфы",
+        "conference": "SQA",
+        "tags": ["social"],
+        "day": 19,
+        "time": "12:00",
+        "status": "scheduled",
+        "description": ""
+      },
+      {
+        "id": "post-1788782661275-406",
+        "title": "Доклады с прошлой конфы",
+        "conference": "SQA",
+        "tags": ["social"],
+        "day": 26,
+        "time": "12:00",
+        "status": "scheduled",
+        "description": ""
+      },
+      {
+        "id": "ad-jan-wed-06",
+        "title": "Доклады с прошлой конфы",
+        "conference": "AD",
+        "tags": ["social", "article"],
+        "day": 6,
+        "time": "12:00",
+        "status": "scheduled",
+        "description": "Строго каждую среду"
+      },
+      {
+        "id": "ad-jan-001",
+        "title": "Мем «Рабочее настроение после праздников»",
+        "conference": "AD",
+        "tags": ["social"],
+        "day": 11,
+        "time": "12:00",
+        "status": "scheduled",
+        "description": "Адаптировано для комьюнити AD."
+      },
+      {
+        "id": "ad-jan-wed-13",
+        "title": "Доклады с прошлой конфы",
+        "conference": "AD",
+        "tags": ["social", "article"],
+        "day": 13,
+        "time": "12:00",
+        "status": "scheduled",
+        "description": "Строго каждую среду"
+      },
+      {
+        "id": "ad-jan-002",
+        "title": "🎥 Каким грейдам будет полезна конференция Analyst Days?",
+        "conference": "AD",
+        "tags": ["reels", "video"],
+        "day": 18,
+        "time": "12:00",
+        "status": "scheduled",
+        "description": "Публикация Reels в период CFP."
+      },
+      {
+        "id": "ad-jan-wed-20",
+        "title": "Доклады с прошлой конфы",
+        "conference": "AD",
+        "tags": ["social", "article"],
+        "day": 20,
+        "time": "12:00",
+        "status": "scheduled",
+        "description": "Строго каждую среду"
+      },
+      {
+        "id": "ad-jan-003",
+        "title": "📈 Повышение цен на билеты Analyst Days 24",
+        "conference": "AD",
+        "tags": ["social"],
+        "day": 25,
+        "time": "10:00",
+        "status": "scheduled",
+        "description": "Ежемесячный пост повышения цен."
+      },
+      {
+        "id": "ad-jan-wed-27",
+        "title": "Доклады с прошлой конфы",
+        "conference": "AD",
+        "tags": ["social", "article"],
+        "day": 27,
+        "time": "12:00",
+        "status": "scheduled",
+        "description": "Строго каждую среду"
+      }
+    ]
+  },
+  {
+    "index": 1,
+    "year": 2027,
+    "name": "Февраль",
+    "shortName": "ФЕВ",
+    "season": "winter",
+    "focusTopic": "Программные комитеты & Early Bird",
+    "goal": "Продажи ранних билетов и работа со спикерами",
+    "items": [
+      {
+        "id": "sqa-feb-001",
+        "title": "🎬 Какая атмосфера на SQA Days?",
+        "tags": ["reels", "video", "social", "article"],
+        "tag": "reels",
+        "conference": "SQA",
+        "day": 10,
+        "time": "12:00",
+        "status": "scheduled",
+        "description": "Нарезка из интервью на конфе: 'Вот у нас много кто: от ручников до автоматизаторов и менеджеров'."
+      },
+      {
+        "id": "sqa-feb-002",
+        "title": "📝 Как подготовиться к выступлению: гайд от ПК",
+        "tags": ["article", "social"],
+        "tag": "article",
+        "conference": "SQA",
+        "day": 3,
+        "time": "12:00",
+        "status": "scheduled",
+        "description": "Экспертная статья от членов программного комитета с советами по оформлению слайдов и речи."
+      },
+      {
+        "id": "sqa-feb-003",
+        "title": "📈 Повышение цен на билеты SQA Days 40",
+        "tags": ["social"],
+        "tag": "social",
+        "conference": "SQA",
+        "day": 24,
+        "time": "10:00",
+        "status": "scheduled",
+        "description": "Ежемесячный пост 24 числа. Финальный Early Bird."
+      },
+      {
+        "id": "post-1788782677620-834",
+        "title": "Доклады с прошлой конфы",
+        "conference": "SQA",
+        "tags": ["social", "article"],
+        "day": 2,
+        "time": "12:00",
+        "status": "scheduled",
+        "description": ""
+      },
+      {
+        "id": "post-1788782684735-810",
+        "title": "Доклады с прошлой конфы",
+        "conference": "SQA",
+        "tags": ["social", "article"],
+        "day": 9,
+        "time": "12:00",
+        "status": "scheduled",
+        "description": ""
+      },
+      {
+        "id": "post-1788782690100-452",
+        "title": "Доклады с прошлой конфы",
+        "conference": "SQA",
+        "tags": ["social", "article"],
+        "day": 16,
+        "time": "12:00",
+        "status": "scheduled",
+        "description": ""
+      },
+      {
+        "id": "post-1788782695499-715",
+        "title": "Доклады с прошлой конфы",
+        "conference": "SQA",
+        "tags": ["social", "article"],
+        "day": 23,
+        "time": "12:00",
+        "status": "scheduled",
+        "description": ""
+      },
+      {
+        "id": "ad-feb-wed-03",
+        "title": "Доклады с прошлой конфы",
+        "conference": "AD",
+        "tags": ["social", "article"],
+        "day": 3,
+        "time": "12:00",
+        "status": "scheduled",
+        "description": "Строго каждую среду"
+      },
+      {
+        "id": "ad-feb-001",
+        "title": "📝 Как подготовиться к выступлению: гайд от ПК Analyst Days",
+        "conference": "AD",
+        "tags": ["article", "social"],
+        "day": 10,
+        "time": "12:00",
+        "status": "scheduled",
+        "description": "Публикация в период активного CFP."
+      },
+      {
+        "id": "ad-feb-wed-10",
+        "title": "Доклады с прошлой конфы",
+        "conference": "AD",
+        "tags": ["social", "article"],
+        "day": 10,
+        "time": "15:00",
+        "status": "scheduled",
+        "description": "Строго каждую среду"
+      },
+      {
+        "id": "ad-feb-002",
+        "title": "🎥 Какая атмосфера на Analyst Days?",
+        "conference": "AD",
+        "tags": ["reels", "video"],
+        "day": 15,
+        "time": "12:00",
+        "status": "scheduled",
+        "description": "Публикация Reels в период CFP."
+      },
+      {
+        "id": "ad-feb-wed-17",
+        "title": "Доклады с прошлой конфы",
+        "conference": "AD",
+        "tags": ["social", "article"],
+        "day": 17,
+        "time": "12:00",
+        "status": "scheduled",
+        "description": "Строго каждую среду"
+      },
+      {
+        "id": "ad-feb-wed-24",
+        "title": "Доклады с прошлой конфы",
+        "conference": "AD",
+        "tags": ["social", "article"],
+        "day": 24,
+        "time": "12:00",
+        "status": "scheduled",
+        "description": "Строго каждую среду"
+      },
+      {
+        "id": "ad-feb-003",
+        "title": "📈 Повышение цен на билеты Analyst Days 24",
+        "conference": "AD",
+        "tags": ["social"],
+        "day": 25,
+        "time": "10:00",
+        "status": "scheduled",
+        "description": "Ежемесячный пост повышения цен."
+      }
+    ]
+  },
+  {
+    "index": 2,
+    "year": 2027,
+    "name": "Март",
+    "shortName": "МАР",
+    "season": "spring",
+    "focusTopic": "Финальные анонсы программы SQA Days 40",
+    "goal": "Продажи билетов и ажиотаж вокруг спикеров",
+    "items": [
+      {
+        "id": "sqa-mar-001",
+        "title": "📧💬 Готова программа SQA Days 40!",
+        "tags": ["email", "telegram", "social"],
+        "tag": "email",
+        "conference": "SQA",
+        "day": 10,
+        "time": "11:00",
+        "status": "scheduled",
+        "description": "Массовая рассылка: программа готова, открываем продажи последних категорий билетов."
+      },
+      {
+        "id": "sqa-mar-003",
+        "title": "📈 Повышение цен на билеты SQA Days 40",
+        "tags": ["social"],
+        "tag": "social",
+        "conference": "SQA",
+        "day": 26,
+        "time": "10:00",
+        "status": "scheduled",
+        "description": "Ежемесячный пост 24 числа. Переход на стандартный прайс."
+      },
+      {
+        "id": "post-1788779876698-428",
+        "title": "📧 Дайджест: топ 5 интересных докладов на конференции SQA Days 39",
+        "conference": "SQA",
+        "tags": ["social", "email", "article"],
+        "day": 31,
+        "time": "12:00",
+        "status": "scheduled",
+        "description": ""
+      },
+      {
+        "id": "post-1788780426525-309",
+        "title": "Отзывы от ПК, участников, докладчиков",
+        "conference": "SQA",
+        "tags": ["social", "reels", "article", "video"],
+        "day": 4,
+        "time": "12:00",
+        "status": "scheduled",
+        "description": ""
+      },
+      {
+        "id": "post-1788780711585-424",
+        "title": "Делимся радостью с ЛПР",
+        "conference": "SQA",
+        "tags": ["telegram"],
+        "day": 25,
+        "time": "12:00",
+        "status": "scheduled",
+        "description": "присылаем сводку спикеров, чьи доклады опубликованы"
+      },
+      {
+        "id": "post-1788782706298-760",
+        "title": "Доклады с прошлой конфы",
+        "conference": "SQA",
+        "tags": ["social", "article"],
+        "day": 2,
+        "time": "12:00",
+        "status": "scheduled",
+        "description": ""
+      },
+      {
+        "id": "post-1788782710282-375",
+        "title": "Доклады с прошлой конфы",
+        "conference": "SQA",
+        "tags": ["social", "article"],
+        "day": 9,
+        "time": "12:00",
+        "status": "scheduled",
+        "description": ""
+      },
+      {
+        "id": "post-1788782713881-859",
+        "title": "Доклады с прошлой конфы",
+        "conference": "SQA",
+        "tags": ["social", "article"],
+        "day": 16,
+        "time": "12:00",
+        "status": "scheduled",
+        "description": ""
+      },
+      {
+        "id": "post-1788782719648-462",
+        "title": "Доклады с прошлой конфы",
+        "conference": "SQA",
+        "tags": ["social", "article"],
+        "day": 23,
+        "time": "12:00",
+        "status": "scheduled",
+        "description": ""
+      },
+      {
+        "id": "post-1788782724731-570",
+        "title": "Доклады с прошлой конфы",
+        "conference": "SQA",
+        "tags": ["social", "article"],
+        "day": 30,
+        "time": "12:00",
+        "status": "scheduled",
+        "description": ""
+      },
+      {
+        "id": "ad-mar-wed-03",
+        "title": "Доклады с прошлой конфы",
+        "conference": "AD",
+        "tags": ["social", "article"],
+        "day": 3,
+        "time": "12:00",
+        "status": "scheduled",
+        "description": "Строго каждую среду"
+      },
+      {
+        "id": "ad-mar-wed-10",
+        "title": "Доклады с прошлой конфы",
+        "conference": "AD",
+        "tags": ["social", "article"],
+        "day": 10,
+        "time": "12:00",
+        "status": "scheduled",
+        "description": "Строго каждую среду"
+      },
+      {
+        "id": "ad-mar-001",
+        "title": "📧 Остался месяц приёма заявок! Гайд по подготовке доклада",
+        "conference": "AD",
+        "tags": ["email", "article"],
+        "day": 15,
+        "time": "10:00",
+        "status": "scheduled",
+        "description": "За 1 месяц до дедлайна CFP на AD 24."
+      },
+      {
+        "id": "ad-mar-wed-17",
+        "title": "Доклады с прошлой конфы",
+        "conference": "AD",
+        "tags": ["social", "article"],
+        "day": 17,
+        "time": "12:00",
+        "status": "scheduled",
+        "description": "Строго каждую среду"
+      },
+      {
+        "id": "ad-mar-002",
+        "title": "💬 Делимся радостью с ЛПР",
+        "conference": "AD",
+        "tags": ["telegram"],
+        "day": 20,
+        "time": "12:00",
+        "status": "scheduled",
+        "description": "Сводка для ЛПР в период CFP."
+      },
+      {
+        "id": "ad-mar-wed-24",
+        "title": "Доклады с прошлой конфы",
+        "conference": "AD",
+        "tags": ["social", "article"],
+        "day": 24,
+        "time": "12:00",
+        "status": "scheduled",
+        "description": "Строго каждую среду"
+      },
+      {
+        "id": "ad-mar-003",
+        "title": "📈 Повышение цен на билеты Analyst Days 24",
+        "conference": "AD",
+        "tags": ["social"],
+        "day": 25,
+        "time": "10:00",
+        "status": "scheduled",
+        "description": "Ежемесячный пост повышения цен."
+      },
+      {
+        "id": "ad-mar-wed-31",
+        "title": "Доклады с прошлой конфы",
+        "conference": "AD",
+        "tags": ["social", "article"],
+        "day": 31,
+        "time": "12:00",
+        "status": "scheduled",
+        "description": "Строго каждую среду"
+      }
+    ]
+  },
+  {
+    "index": 3,
+    "year": 2027,
+    "name": "Апрель",
+    "shortName": "АПР",
+    "season": "spring",
+    "focusTopic": "SQA Days 40 (СПб, 23–24 апреля)",
+    "goal": "Проведение SQA Days 40 и освещение докладов",
+    "items": [
+      {
+        "id": "sqa-apr-001",
+        "title": "📧 Письмо участникам SQA Days 40 с инфо",
+        "tags": ["email"],
+        "tag": "email",
+        "conference": "SQA",
+        "day": 22,
+        "time": "10:00",
+        "status": "scheduled",
+        "description": "Логистика, карта площадки, Wi-Fi, расписание и ссылки на чаты для апрельской конференции."
+      },
+      {
+        "id": "sqa-apr-003",
+        "title": "🎬 День 1: SQA Days 40 и атмосфера",
+        "tags": ["reels", "video", "social"],
+        "tag": "reels",
+        "conference": "SQA",
+        "day": 23,
+        "time": "11:00",
+        "status": "scheduled",
+        "description": "Stories в ТГ/ВК + Reels/Shorts. Живые кадры открытия в СПб."
+      },
+      {
+        "id": "sqa-apr-004",
+        "title": "🎬 День 2: SQA Days 40 и атмосфера",
+        "tags": ["reels", "video", "social"],
+        "tag": "reels",
+        "conference": "SQA",
+        "day": 24,
+        "time": "16:00",
+        "status": "scheduled",
+        "description": "Пакетный выклад контента, снятого во время конференции: блиц-опросы, цифры, смешные моменты."
+      },
+      {
+        "id": "post-1788780252490-973",
+        "title": "Осталась неделя до конфы!",
+        "conference": "SQA",
+        "tags": ["social", "email"],
+        "day": 16,
+        "time": "12:00",
+        "status": "scheduled",
+        "description": "Отправить тем кто еще не приобрел билет"
+      },
+      {
+        "id": "post-1788780331876-684",
+        "title": "Что нужно чтобы классно провести время на конфе",
+        "conference": "SQA",
+        "tags": ["social", "article"],
+        "day": 2,
+        "time": "12:00",
+        "status": "scheduled",
+        "description": ""
+      },
+      {
+        "id": "post-1788781100341-378",
+        "title": "Давайте вспомним как это было: краткий обзорный ролик + стикер",
+        "conference": "SQA",
+        "tags": ["social", "video"],
+        "day": 26,
+        "time": "12:00",
+        "status": "scheduled",
+        "description": ""
+      },
+      {
+        "id": "post-1788782751613-807",
+        "title": "Доклады с прошлой конфы",
+        "conference": "SQA",
+        "tags": ["social", "article"],
+        "day": 6,
+        "time": "12:00",
+        "status": "scheduled",
+        "description": ""
+      },
+      {
+        "id": "ad-apr-wed-07",
+        "title": "Доклады с прошлой конфы",
+        "conference": "AD",
+        "tags": ["social", "article"],
+        "day": 7,
+        "time": "12:00",
+        "status": "scheduled",
+        "description": "Строго каждую среду"
+      },
+      {
+        "id": "ad-apr-001",
+        "title": "📝 Отзывы от ПК, участников, докладчиков",
+        "conference": "AD",
+        "tags": ["article", "social"],
+        "day": 9,
+        "time": "12:00",
+        "status": "scheduled",
+        "description": "За 7 недель до Analyst Days 24."
+      },
+      {
+        "id": "ad-apr-wed-14",
+        "title": "Доклады с прошлой конфы",
+        "conference": "AD",
+        "tags": ["social", "article"],
+        "day": 14,
+        "time": "12:00",
+        "status": "scheduled",
+        "description": "Строго каждую среду"
+      },
+      {
+        "id": "ad-apr-002",
+        "title": "📧 Готова программа Analyst Days 24!",
+        "conference": "AD",
+        "tags": ["email", "social"],
+        "day": 16,
+        "time": "10:00",
+        "status": "scheduled",
+        "description": "За 6 недель до конференции."
+      },
+      {
+        "id": "ad-apr-003",
+        "title": "IT-мемы про аналитику и дедлайны",
+        "conference": "AD",
+        "tags": ["social"],
+        "day": 20,
+        "time": "12:00",
+        "status": "scheduled",
+        "description": "Разовый развлекательный контент в период прогрева."
+      },
+      {
+        "id": "ad-apr-wed-21",
+        "title": "Доклады с прошлой конфы",
+        "conference": "AD",
+        "tags": ["social", "article"],
+        "day": 21,
+        "time": "12:00",
+        "status": "scheduled",
+        "description": "Строго каждую среду"
+      },
+      {
+        "id": "ad-apr-004",
+        "title": "📈 Повышение цен на билеты Analyst Days 24",
+        "conference": "AD",
+        "tags": ["social"],
+        "day": 25,
+        "time": "10:00",
+        "status": "scheduled",
+        "description": "Ежемесячный пост повышения цен."
+      },
+      {
+        "id": "ad-apr-wed-28",
+        "title": "Доклады с прошлой конфы",
+        "conference": "AD",
+        "tags": ["social", "article"],
+        "day": 28,
+        "time": "12:00",
+        "status": "scheduled",
+        "description": "Строго каждую среду"
+      }
+    ]
+  },
+  {
+    "index": 4,
+    "year": 2027,
+    "name": "Май",
+    "shortName": "МАЙ",
+    "season": "spring",
+    "focusTopic": "Analyst Days 24 (СПб, 28–29 мая)",
+    "goal": "Проведение Analyst Days 24 и освещение докладов",
+    "items": [
+      {
+        "id": "post-1788781158202-698",
+        "title": "Доступы к видео + заполняй анкету ОС",
+        "conference": "SQA",
+        "tags": ["email"],
+        "day": 4,
+        "time": "12:00",
+        "status": "scheduled",
+        "description": "рассылка участникам"
+      },
+      {
+        "id": "post-1788781178069-166",
+        "title": "Открыт прием заявок на SQA Days 41!",
+        "conference": "SQA",
+        "tags": ["social", "email", "telegram", "video"],
+        "day": 11,
+        "time": "12:00",
+        "status": "scheduled",
+        "description": ""
+      },
+      {
+        "id": "post-1788781199904-449",
+        "title": "Статистика SQA Days 40 в цифрах",
+        "conference": "SQA",
+        "tags": ["social", "video"],
+        "day": 18,
+        "time": "12:00",
+        "status": "scheduled",
+        "description": ""
+      },
+      {
+        "id": "post-1788781321285-274",
+        "title": "📈 Повышение цен на билеты SQA Days 41",
+        "conference": "SQA",
+        "tags": ["social"],
+        "day": 26,
+        "time": "12:00",
+        "status": "scheduled",
+        "description": ""
+      },
+      {
+        "id": "ad-may-wed-05",
+        "title": "Доклады с прошлой конфы",
+        "conference": "AD",
+        "tags": ["social", "article"],
+        "day": 5,
+        "time": "12:00",
+        "status": "scheduled",
+        "description": "Строго каждую среду"
+      },
+      {
+        "id": "ad-may-001",
+        "title": "📧 Дайджест: топ-5 интересных докладов Analyst Days",
+        "conference": "AD",
+        "tags": ["email"],
+        "day": 5,
+        "time": "10:00",
+        "status": "scheduled",
+        "description": "За 3-4 недели до конференции."
+      },
+      {
+        "id": "ad-may-002",
+        "title": "📝 Что нужно, чтобы классно провести время на конфе",
+        "conference": "AD",
+        "tags": ["article", "social"],
+        "day": 6,
+        "time": "12:00",
+        "status": "scheduled",
+        "description": "За 3 недели до AD 24."
+      },
+      {
+        "id": "ad-may-003",
+        "title": "📝 Почему стоит ходить на профильные конференции",
+        "conference": "AD",
+        "tags": ["article", "social"],
+        "day": 7,
+        "time": "12:00",
+        "status": "scheduled",
+        "description": "За 3 недели до конференции."
+      },
+      {
+        "id": "ad-may-wed-12",
+        "title": "Доклады с прошлой конфы",
+        "conference": "AD",
+        "tags": ["social", "article"],
+        "day": 12,
+        "time": "12:00",
+        "status": "scheduled",
+        "description": "Строго каждую среду"
+      },
+      {
+        "id": "ad-may-004",
+        "title": "Акция «Окно удачи»",
+        "conference": "AD",
+        "tags": ["social", "email"],
+        "day": 19,
+        "time": "10:00",
+        "status": "scheduled",
+        "description": "За 9 дней до конференции."
+      },
+      {
+        "id": "ad-may-wed-19",
+        "title": "Доклады с прошлой конфы",
+        "conference": "AD",
+        "tags": ["social", "article"],
+        "day": 19,
+        "time": "12:00",
+        "status": "scheduled",
+        "description": "Строго каждую среду"
+      },
+      {
+        "id": "ad-may-005",
+        "title": "Всего неделя до конференции, приходите!",
+        "conference": "AD",
+        "tags": ["social", "email"],
+        "day": 21,
+        "time": "10:00",
+        "status": "scheduled",
+        "description": "Ровно за 7 дней до AD 24."
+      },
+      {
+        "id": "ad-may-006",
+        "title": "📈 Повышение цен на билеты Analyst Days 24",
+        "conference": "AD",
+        "tags": ["social"],
+        "day": 25,
+        "time": "10:00",
+        "status": "scheduled",
+        "description": "Ежемесячный пост повышения цен."
+      },
+      {
+        "id": "ad-may-wed-26",
+        "title": "Доклады с прошлой конфы",
+        "conference": "AD",
+        "tags": ["social", "article"],
+        "day": 26,
+        "time": "12:00",
+        "status": "scheduled",
+        "description": "Строго каждую среду"
+      },
+      {
+        "id": "ad-may-007",
+        "title": "📧 Письмо участникам Analyst Days 24 с полезной информацией",
+        "conference": "AD",
+        "tags": ["email"],
+        "day": 27,
+        "time": "10:00",
+        "status": "scheduled",
+        "description": "Логистика, карта, Wi-Fi. За 1 день до конфы."
+      },
+      {
+        "id": "ad-may-008",
+        "title": "🎬 День 1: атмосфера конференции Analyst Days 24",
+        "conference": "AD",
+        "tags": ["reels", "social"],
+        "day": 28,
+        "time": "12:00",
+        "status": "scheduled",
+        "description": "В первый день конференции."
+      },
+      {
+        "id": "ad-may-009",
+        "title": "🎥 День 2: атмосфера конференции Analyst Days 24",
+        "conference": "AD",
+        "tags": ["reels", "social"],
+        "day": 29,
+        "time": "12:00",
+        "status": "scheduled",
+        "description": "Во второй день конференции."
+      },
+      {
+        "id": "ad-may-010",
+        "title": "Пост про победителей Analyst Days",
+        "conference": "AD",
+        "tags": ["social"],
+        "day": 29,
+        "time": "16:00",
+        "status": "scheduled",
+        "description": "В последний день конференции."
+      },
+      {
+        "id": "ad-may-011",
+        "title": "🎬 Давайте вспомним, как это было (Analyst Days 24)",
+        "conference": "AD",
+        "tags": ["video", "social"],
+        "day": 31,
+        "time": "12:00",
+        "status": "scheduled",
+        "description": "Краткий обзорный ролик + стикерпак через 2 дня после."
+      }
+    ]
+  },
+  {
+    "index": 5,
+    "year": 2027,
+    "name": "Июнь",
+    "shortName": "ИЮН",
+    "season": "summer",
+    "focusTopic": "Материалы весенних конф & Итоги",
+    "goal": "Публикация записей и презентаций",
+    "items": []
+  },
+  {
+    "index": 6,
+    "year": 2027,
+    "name": "Июль",
+    "shortName": "ИЮЛ",
+    "season": "summer",
+    "focusTopic": "Летний ИТ-Нетворкинг & CFP Осень",
+    "goal": "Приём заявок на осенние SQA 41 и Analyst Days 25",
+    "items": []
+  },
+  {
+    "index": 7,
+    "year": 2027,
+    "name": "Август",
+    "shortName": "АВГ",
+    "season": "summer",
+    "focusTopic": "Анонс осенней программы и Early Bird",
+    "goal": "Продажи билетов на осенние конференции",
+    "items": []
+  },
+  {
+    "index": 8,
+    "year": 2027,
+    "name": "Сентябрь",
+    "shortName": "СЕН",
+    "season": "autumn",
+    "focusTopic": "Финал прогонов докладов и подготовка",
+    "goal": "Прогон выступлений спикеров и маркетинг",
+    "items": []
+  },
+  {
+    "index": 9,
+    "year": 2027,
+    "name": "Октябрь",
+    "shortName": "ОКТ",
+    "season": "autumn",
+    "focusTopic": "SQA Days 41 (Москва, 28–29 октября)",
+    "goal": "Проведение SQA Days 41 в Москве",
+    "items": []
+  },
+  {
+    "index": 10,
+    "year": 2027,
+    "name": "Ноябрь",
+    "shortName": "НОЯ",
+    "season": "autumn",
+    "focusTopic": "Analyst Days 25 (Москва, 18–19 ноября)",
+    "goal": "Проведение Analyst Days 25 в Москве",
+    "items": []
+  },
+  {
+    "index": 11,
+    "year": 2027,
+    "name": "Декабрь",
+    "shortName": "ДЕК",
+    "season": "winter",
+    "focusTopic": "Итоги 2027 года",
+    "goal": "Рейтинг лучших докладов года и подведение итогов",
+    "items": []
+  }
+]
