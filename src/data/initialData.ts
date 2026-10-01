@@ -10,7 +10,7 @@ export const CONFERENCE_CONFIGS: Record<ConferenceType, ConferenceConfig> = {
     bgColor: 'bg-orange-50 text-orange-700',
     borderColor: 'border-orange-400',
     textColor: 'text-orange-700',
-    description: 'Конференция по системному и бизнес-анализу',
+    description: 'по системному и бизнес анализу',
   },
   SQA: {
     id: 'SQA',
@@ -21,7 +21,7 @@ export const CONFERENCE_CONFIGS: Record<ConferenceType, ConferenceConfig> = {
     bgColor: 'bg-emerald-50 text-emerald-700',
     borderColor: 'border-emerald-400',
     textColor: 'text-emerald-700',
-    description: 'Конференция по тестированию и качеству ПО',
+    description: 'по тестированию и качеству ПО',
   },
   TWD: {
     id: 'TWD',
@@ -32,7 +32,7 @@ export const CONFERENCE_CONFIGS: Record<ConferenceType, ConferenceConfig> = {
     bgColor: 'bg-blue-50 text-blue-700',
     borderColor: 'border-blue-400',
     textColor: 'text-blue-700',
-    description: 'Конференция по технической документации и писательству',
+    description: 'по технической документации',
   },
 };
 

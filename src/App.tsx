@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
-import { MonthData, PostItem, TagType, ConferenceFilterType, ConferenceType } from './types';
+import { MonthData, PostItem, TagType, ConferenceFilterType, ConferenceType, PostStatus, IdeaSheet, IdeaNote } from './types';
 import { ALL_INITIAL_MONTHS } from './data/initialData';
+import { INITIAL_IDEA_SHEETS } from './data/initialIdeaSheets';
 import { Navbar } from './components/Navbar';
 import { Hero } from './components/Hero';
 import { WheelChart } from './components/WheelChart';
@@ -8,6 +9,7 @@ import { MonthCalendar } from './components/MonthCalendar';
 import { AnnualAnalytics } from './components/AnnualAnalytics';
 import { PostModal } from './components/PostModal';
 import { AiStrategyModal } from './components/AiStrategyModal';
+import { IdeaNotesModal } from './components/IdeaNotesModal';
 import { PdfReportView } from './components/PdfReportView';
 import { PasswordGate } from './components/PasswordGate';
 import { OnboardingModal } from './components/OnboardingModal';
@@ -55,6 +57,24 @@ return ALL_INITIAL_MONTHS;
   const [editingPost, setEditingPost] = useState<PostItem | null>(null);
   const [initialPostDay, setInitialPostDay] = useState<number>(1);
   const [isAiModalOpen, setIsAiModalOpen] = useState(false);
+
+  // Заметки для идей (листы с заметками)
+  const [isIdeasModalOpen, setIsIdeasModalOpen] = useState(false);
+  const [ideaSheets, setIdeaSheets] = useState<IdeaSheet[]>(() => {
+    const saved = localStorage.getItem('qa_idea_sheets_v1');
+    if (saved) {
+      try {
+        const parsed = JSON.parse(saved);
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          return parsed;
+        }
+      } catch (e) {
+        console.error('Error loading idea sheets from local storage:', e);
+      }
+    }
+    return INITIAL_IDEA_SHEETS;
+  });
+
   const [isOnboardingOpen, setIsOnboardingOpen] = useState(() => {
     return !localStorage.getItem('content_hub_onboarded');
   });
@@ -79,10 +99,23 @@ months[0] ||
 
   const totalPostsCount = visibleMonths.reduce((acc, m) => acc + m.items.length, 0);
 
+  const getAuthHeaders = useCallback((): Record<string, string> => {
+    const token = localStorage.getItem('session_token');
+    return token ? { Authorization: `Bearer ${token}` } : {};
+  }, []);
+
+  const handleSessionExpired = useCallback(() => {
+    localStorage.removeItem('session_token');
+    setIsAuthenticated(false);
+  }, []);
+
   // 1. Check session on mount
   useEffect(() => {
     let isMounted = true;
-    fetch('/api/session-check', { credentials: 'include' })
+    fetch('/api/session-check', {
+      credentials: 'include',
+      headers: getAuthHeaders(),
+    })
       .then((res) => {
         if (!isMounted) return;
         setIsAuthenticated(res.ok);
@@ -94,13 +127,16 @@ months[0] ||
         if (isMounted) setIsCheckingSession(false);
       });
     return () => { isMounted = false; };
-  }, []);
+  }, [getAuthHeaders]);
 
   // 2. Load data from DB (only if authenticated)
   useEffect(() => {
     if (!isAuthenticated) return;
     let isMounted = true;
-    fetch('/api/content-db', { credentials: 'include' })
+    fetch('/api/content-db', {
+      credentials: 'include',
+      headers: getAuthHeaders(),
+    })
       .then((res) => {
         if (res.status === 401) { handleSessionExpired(); return null; }
         return res.json();
@@ -120,15 +156,54 @@ setDbSaved(true);
 }
 })
       .catch((err) => console.warn('Backend DB fetch error, using fallback:', err));
-    return () => { isMounted = false; };
-  }, [isAuthenticated]);
 
-  const handleSessionExpired = useCallback(() => setIsAuthenticated(false), []);
+    // Загрузка листов заметок для идей с сервера
+    fetch('/api/idea-sheets', {
+      credentials: 'include',
+      headers: getAuthHeaders(),
+    })
+      .then((res) => {
+        if (res.status === 401) return null;
+        return res.json();
+      })
+      .then((resData) => {
+        if (!isMounted || !resData) return;
+        const sheetsArray = Array.isArray(resData.data) ? resData.data : null;
+        if (sheetsArray && sheetsArray.length > 0) {
+          setIdeaSheets(sheetsArray);
+          localStorage.setItem('qa_idea_sheets_v1', JSON.stringify(sheetsArray));
+        }
+      })
+      .catch((err) => console.warn('Backend idea sheets fetch error, using fallback:', err));
+
+    return () => { isMounted = false; };
+  }, [isAuthenticated, getAuthHeaders, handleSessionExpired]);
+
   const handleAuthSuccess = useCallback(() => setIsAuthenticated(true), []);
   const handleLock = useCallback(() => {
-    fetch('/api/logout', { method: 'POST', credentials: 'include' }).catch(() => {});
+    fetch('/api/logout', {
+      method: 'POST',
+      credentials: 'include',
+      headers: getAuthHeaders(),
+    }).catch(() => {});
+    localStorage.removeItem('session_token');
     setIsAuthenticated(false);
-  }, []);
+  }, [getAuthHeaders]);
+
+  // Сохранение листов заметок (локально + на сервере)
+  const handleSaveIdeaSheets = useCallback((newSheets: IdeaSheet[]) => {
+    setIdeaSheets(newSheets);
+    localStorage.setItem('qa_idea_sheets_v1', JSON.stringify(newSheets));
+    fetch('/api/idea-sheets', {
+      method: 'POST',
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json',
+        ...getAuthHeaders(),
+      },
+      body: JSON.stringify(newSheets),
+    }).catch((err) => console.error('Error saving idea sheets to server:', err));
+  }, [getAuthHeaders]);
 
   const saveMonthsData = useCallback((newMonths: MonthData[]) => {
     setMonths(newMonths);
@@ -137,7 +212,10 @@ setDbSaved(true);
     fetch('/api/content-db', {
       method: 'POST',
       credentials: 'include',
-      headers: { 'Content-Type': 'application/json' },
+      headers: {
+        'Content-Type': 'application/json',
+        ...getAuthHeaders(),
+      },
       body: JSON.stringify(newMonths),
     })
       .then((res) => {
@@ -146,7 +224,7 @@ setDbSaved(true);
       })
       .then((resData) => { if (resData?.success) setDbSaved(true); })
       .catch((err) => console.error('Error saving DB:', err));
-  }, [handleSessionExpired]);
+  }, [handleSessionExpired, getAuthHeaders]);
 
   const handleOpenAddPost = (dayNum?: number) => {
     setEditingPost(null);
@@ -155,11 +233,21 @@ setDbSaved(true);
   };
 
   const handleOpenEditPost = (post: PostItem) => {
-    setEditingPost(post);
+    const currentMonths = monthsRef.current;
+    const postMonth = currentMonths.find((m) => m.year === selectedYear && m.items.some((i) => i.id === post.id))
+      || currentMonths.find((m) => m.items.some((i) => i.id === post.id));
+    const effectiveMonthIndex = typeof post.monthIndex === 'number'
+      ? post.monthIndex
+      : (postMonth ? postMonth.index : selectedMonthIndex);
+
+    setEditingPost({
+      ...post,
+      monthIndex: effectiveMonthIndex,
+    });
     setIsPostModalOpen(true);
   };
 
-  const handleSavePost = useCallback((postData: Partial<PostItem>) => {
+  const handleSavePost = useCallback((postData: Partial<PostItem> & { monthIndex: number }) => {
     if (selectedTagFilter !== 'all' && postData.tags && !postData.tags.includes(selectedTagFilter)) {
       setSelectedTagFilter('all');
     }
@@ -167,44 +255,106 @@ setDbSaved(true);
       setSelectedConferenceFilter('all');
     }
     const currentMonths = monthsRef.current;
-    const updatedMonths = currentMonths.map((m) => {
-      if (postData.id) {
+    const targetMonthIndex = typeof postData.monthIndex === 'number' ? postData.monthIndex : selectedMonthIndex;
+    const targetMonthObj = currentMonths.find((m) => m.index === targetMonthIndex && m.year === selectedYear);
+    const targetMonthName = targetMonthObj ? targetMonthObj.name : 'выбранный месяц';
+
+    // Случай 1: Редактирование существующего поста
+    if (postData.id) {
+      const originalMonth = currentMonths.find((m) => m.year === selectedYear && m.items.some((i) => i.id === postData.id))
+        || currentMonths.find((m) => m.items.some((i) => i.id === postData.id));
+
+      const isMovedToDifferentMonth = originalMonth && originalMonth.index !== targetMonthIndex;
+      let movedPost: PostItem | null = null;
+
+      const updatedMonths = currentMonths.map((m) => {
+        if (isMovedToDifferentMonth) {
+          if (m.year === originalMonth.year && m.index === originalMonth.index) {
+            const found = m.items.find((item) => item.id === postData.id);
+            if (found) {
+              movedPost = {
+                ...found,
+                ...postData,
+                monthIndex: targetMonthIndex,
+              } as PostItem;
+            }
+            return {
+              ...m,
+              items: m.items.filter((item) => item.id !== postData.id),
+            };
+          }
+          return m;
+        }
+
         const hasItem = m.items.some((i) => i.id === postData.id);
         if (hasItem) {
           return {
             ...m,
             items: m.items.map((item) =>
-              item.id === postData.id ? ({ ...item, ...postData } as PostItem) : item
+              item.id === postData.id ? ({ ...item, ...postData, monthIndex: m.index } as PostItem) : item
             ),
           };
         }
+        return m;
+      });
+
+      let finalMonths = updatedMonths;
+      if (isMovedToDifferentMonth && movedPost) {
+        finalMonths = updatedMonths.map((m) => {
+          if (m.index === targetMonthIndex && m.year === selectedYear) {
+            return {
+              ...m,
+              items: [...m.items, movedPost!],
+            };
+          }
+          return m;
+        });
+        setSelectedMonthIndex(targetMonthIndex);
       }
-      if (!postData.id && m.index === selectedMonthIndex && m.year === selectedYear) {
-        const newPost: PostItem = {
-          id: `post-${Date.now()}-${Math.floor(Math.random() * 1000)}`,
-          title: postData.title || 'Новая публикация',
-          conference: postData.conference || 'AD',
-          tags: postData.tags?.length ? postData.tags : ['social'],
-          day: postData.day || 1,
-          time: postData.time || '12:00',
-          status: postData.status || 'scheduled',
-          description: postData.description || '',
-          contentText: postData.contentText,
-          hashtags: postData.hashtags,
-          callToAction: postData.callToAction,
-          bestPostingTime: postData.bestPostingTime,
-        };
+
+      saveMonthsData(finalMonths);
+      addToast({
+        type: 'success',
+        title: isMovedToDifferentMonth ? `Перенесено в ${targetMonthName}` : 'Публикация обновлена',
+        message: `«${postData.title || 'Без названия'}»`,
+      });
+      return;
+    }
+
+    // Случай 2: Создание нового поста
+    const newPost: PostItem = {
+      id: `post-${Date.now()}-${Math.floor(Math.random() * 1000)}`,
+      title: postData.title || 'Новая публикация',
+      conference: postData.conference || 'AD',
+      tags: postData.tags?.length ? postData.tags : ['social'],
+      monthIndex: targetMonthIndex,
+      day: postData.day || 1,
+      time: postData.time || '12:00',
+      status: postData.status || 'scheduled',
+      description: postData.description || '',
+      contentText: postData.contentText,
+      hashtags: postData.hashtags,
+      callToAction: postData.callToAction,
+      bestPostingTime: postData.bestPostingTime,
+    };
+
+    const updatedMonths = currentMonths.map((m) => {
+      if (m.index === targetMonthIndex && m.year === selectedYear) {
         return { ...m, items: [...m.items, newPost] };
       }
       return m;
     });
+
     saveMonthsData(updatedMonths);
+    if (targetMonthIndex !== selectedMonthIndex) {
+      setSelectedMonthIndex(targetMonthIndex);
+    }
     addToast({
       type: 'success',
-      title: postData.id ? 'Публикация обновлена' : 'Публикация добавлена',
-      message: `«${postData.title || 'Без названия'}»`,
+      title: 'Публикация добавлена',
+      message: `«${newPost.title}» добавлена в ${targetMonthName}`,
     });
-  }, [selectedMonthIndex, selectedYear, selectedTagFilter, selectedConferenceFilter, addToast, saveMonthsData]);
+  }, [selectedTagFilter, selectedConferenceFilter, selectedMonthIndex, selectedYear, saveMonthsData, addToast]);
 
   const handleDeletePost = useCallback((postId: string) => {
     const currentMonths = monthsRef.current;
@@ -253,7 +403,7 @@ setDbSaved(true);
         ...m,
         items: m.items.map((item) => {
           if (item.id === postId) {
-            const nextStatus = item.status === 'published' ? 'scheduled' : 'published';
+            const nextStatus: PostStatus = item.status === 'published' ? 'scheduled' : 'published';
             return { ...item, status: nextStatus };
           }
           return item;
@@ -303,13 +453,52 @@ setDbSaved(true);
     saveMonthsData(updatedMonths);
   }, [saveMonthsData]);
 
+  const handleConvertIdeaToPost = useCallback((note: IdeaNote) => {
+    const conf: ConferenceType =
+      note.conference && ['AD', 'SQA', 'TWD'].includes(note.conference)
+        ? (note.conference as ConferenceType)
+        : 'AD';
+
+    const VALID_TAGS: TagType[] = ['email', 'telegram', 'social', 'article', 'video', 'reels'];
+    const matchedTags: TagType[] = (note.tags || []).filter((t): t is TagType => (VALID_TAGS as string[]).includes(t));
+    const finalTags: TagType[] = matchedTags.length > 0 ? matchedTags : ['article'];
+
+    setEditingPost({
+      id: '',
+      title: note.title,
+      description: note.content || '',
+      conference: conf,
+      tags: finalTags,
+      monthIndex: selectedMonthIndex,
+      day: 15,
+      status: 'idea',
+      time: '12:00',
+    });
+    setInitialPostDay(15);
+    setIsPostModalOpen(true);
+    addToast({
+      type: 'success',
+      title: 'Идея скопирована в черновик',
+      message: `Заполните дату в месяце ${currentMonthData.name} и сохраните пост`,
+    });
+  }, [addToast, currentMonthData.name, selectedMonthIndex]);
+
+  const totalIdeasCount = ideaSheets.reduce((sum, s) => sum + s.notes.length, 0);
+
   const handleExportPdf = () => {
     exportPlanToPdf('pdf-export-report-container', `IT-Conferences-Content-Strategy-${selectedYear}.pdf`);
     addToast({ type: 'success', title: `Экспорт PDF (${selectedYear}) начат`, message: 'Файл будет скачан автоматически' });
   };
 
   const handleExportJson = () => {
-    const jsonStr = JSON.stringify(months, null, 2);
+    const exportedMonths = months.map((m) => ({
+      ...m,
+      items: m.items.map((it) => ({
+        ...it,
+        monthIndex: typeof it.monthIndex === 'number' ? it.monthIndex : m.index,
+      })),
+    }));
+    const jsonStr = JSON.stringify(exportedMonths, null, 2);
     const blob = new Blob([jsonStr], { type: 'application/json' });
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
@@ -319,16 +508,26 @@ setDbSaved(true);
     link.click();
     document.body.removeChild(link);
     URL.revokeObjectURL(url);
-    addToast({ type: 'success', title: 'JSON экспортирован', message: 'Файл базы данных скачан' });
+    addToast({ type: 'success', title: 'JSON экспортирован', message: 'Файл базы данных скачан (с номерами месяцев)' });
   };
 
-  const handleSearchSelect = (monthIndex: number, _postId: string) => {
+  const handleSearchSelect = (monthIndex: number, postId: string) => {
     const found = months.find((m) => m.index === monthIndex);
     if (found) {
       if (found.year === 2027 && !is2027Expanded) setIs2027Expanded(true);
       setSelectedYear(found.year);
     }
     setSelectedMonthIndex(monthIndex);
+
+    // Find and open the post in the details modal
+    if (postId) {
+      const targetMonth = months.find((m) => m.index === monthIndex);
+      const targetPost = targetMonth?.items?.find((item) => item.id === postId);
+      if (targetPost) {
+        handleOpenEditPost(targetPost);
+      }
+    }
+
     setTimeout(() => {
       const calendarElem = document.getElementById('month-calendar');
       if (calendarElem) calendarElem.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -349,24 +548,27 @@ setDbSaved(true);
     return <PasswordGate onSuccess={handleAuthSuccess} />;
   }
 
+  const handleYearChange = (y: number) => {
+    if (y === 2027 && !is2027Expanded) setIs2027Expanded(true);
+    setSelectedYear(y);
+    const first = months.find((m) => m.year === y);
+    if (first) setSelectedMonthIndex(first.index);
+  };
+
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900 transition-colors selection:bg-indigo-500 selection:text-white">
       <Navbar
         months={months}
         selectedYear={selectedYear}
-        onChangeYear={(y) => {
-          if (y === 2027 && !is2027Expanded) setIs2027Expanded(true);
-          setSelectedYear(y);
-          const first = months.find((m) => m.year === y);
-          if (first) setSelectedMonthIndex(first.index);
-        }}
+        onChangeYear={handleYearChange}
         is2027Expanded={is2027Expanded}
         onToggle2027={() => setIs2027Expanded((v) => !v)}
         onSearchSelect={handleSearchSelect}
         onOpenAiGenerator={() => setIsAiModalOpen(true)}
         onExportPdf={handleExportPdf}
         onLock={handleLock}
-        onOpenOnboarding={() => setIsOnboardingOpen(true)}
+        onOpenIdeas={() => setIsIdeasModalOpen(true)}
+        ideasCount={totalIdeasCount}
       />
       <main id="export-pdf-container" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
         <Hero
@@ -387,6 +589,7 @@ setDbSaved(true);
             onFilterConference={(conf) => setSelectedConferenceFilter(conf)}
             onOpenAiGenerator={() => setIsAiModalOpen(true)}
             year={selectedYear}
+            onChangeYear={handleYearChange}
           />
         </section>
         <section className="my-8">
@@ -413,6 +616,10 @@ setDbSaved(true);
             © {selectedYear} <strong>ИТ-Конференции: AD • SQA • TWD</strong>. Планер контент-стратегии.
           </div>
           <div className="flex items-center gap-4">
+            <button onClick={() => setIsOnboardingOpen(true)} className="hover:underline">
+              Справка и гид
+            </button>
+            <span>•</span>
             <button onClick={handleExportJson} className="hover:underline flex items-center gap-1">
               Экспорт БД JSON
             </button>
@@ -428,6 +635,8 @@ setDbSaved(true);
         onClose={() => setIsPostModalOpen(false)}
         post={editingPost}
         initialDay={initialPostDay}
+        initialMonthIndex={selectedMonthIndex}
+        monthsList={visibleMonths}
         selectedMonthName={currentMonthData.name}
         onSave={handleSavePost}
         onDelete={handleDeletePost}
@@ -438,6 +647,13 @@ setDbSaved(true);
         months={visibleMonths}
         onAddPost={handleAddSuggestedPost}
         onAddPostsBatch={handleAddSuggestedPostsBatch}
+      />
+      <IdeaNotesModal
+        isOpen={isIdeasModalOpen}
+        onClose={() => setIsIdeasModalOpen(false)}
+        sheets={ideaSheets}
+        onSaveSheets={handleSaveIdeaSheets}
+        onConvertToPost={handleConvertIdeaToPost}
       />
       <div style={{ position: 'fixed', left: '-9999px', top: '0px', zIndex: -9999, pointerEvents: 'none' }}>
         <PdfReportView months={visibleMonths} year={selectedYear} />

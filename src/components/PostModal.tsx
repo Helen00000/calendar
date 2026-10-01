@@ -8,16 +8,35 @@ interface PostModalProps {
   onClose: () => void;
   post: PostItem | null;
   initialDay?: number;
+  initialMonthIndex?: number;
+  monthsList?: { index: number; name: string; year?: number }[];
   selectedMonthName: string;
-  onSave: (post: Partial<PostItem>) => void;
+  onSave: (post: Partial<PostItem> & { monthIndex: number }) => void;
   onDelete?: (id: string) => void;
 }
+
+const DEFAULT_MONTH_OPTIONS = [
+  { index: 0, name: 'Январь' },
+  { index: 1, name: 'Февраль' },
+  { index: 2, name: 'Март' },
+  { index: 3, name: 'Апрель' },
+  { index: 4, name: 'Май' },
+  { index: 5, name: 'Июнь' },
+  { index: 6, name: 'Июль' },
+  { index: 7, name: 'Август' },
+  { index: 8, name: 'Сентябрь' },
+  { index: 9, name: 'Октябрь' },
+  { index: 10, name: 'Ноябрь' },
+  { index: 11, name: 'Декабрь' },
+];
 
 export const PostModal: React.FC<PostModalProps> = ({
   isOpen,
   onClose,
   post,
   initialDay = 1,
+  initialMonthIndex = 0,
+  monthsList,
   selectedMonthName,
   onSave,
   onDelete,
@@ -25,6 +44,7 @@ export const PostModal: React.FC<PostModalProps> = ({
   const [title, setTitle] = useState('');
   const [conference, setConference] = useState<ConferenceType>('AD');
   const [tags, setTags] = useState<TagType[]>(['social']);
+  const [monthIndex, setMonthIndex] = useState<number>(initialMonthIndex);
   const [day, setDay] = useState(1);
   const [time, setTime] = useState('12:00');
   const [status, setStatus] = useState<PostStatus>('scheduled');
@@ -42,6 +62,10 @@ export const PostModal: React.FC<PostModalProps> = ({
   const [copiedText, setCopiedText] = useState(false);
   const [confirmDelete, setConfirmDelete] = useState(false);
 
+  const monthOptions = monthsList && monthsList.length > 0 ? monthsList : DEFAULT_MONTH_OPTIONS;
+  const currentMonthOption = monthOptions.find((m) => m.index === monthIndex);
+  const displayedMonthName = currentMonthOption ? currentMonthOption.name : selectedMonthName;
+
   useEffect(() => {
     setConfirmDelete(false);
     if (post) {
@@ -52,6 +76,7 @@ export const PostModal: React.FC<PostModalProps> = ({
       setTime(post.time || '12:00');
       setStatus(post.status || 'scheduled');
       setDescription(post.description || '');
+      setMonthIndex(typeof post.monthIndex === 'number' ? post.monthIndex : initialMonthIndex);
       if (post.contentText) {
         setAiDraft({
           headline: post.title,
@@ -72,8 +97,9 @@ export const PostModal: React.FC<PostModalProps> = ({
       setStatus('scheduled');
       setDescription('');
       setAiDraft(null);
+      setMonthIndex(initialMonthIndex);
     }
-  }, [post, isOpen, initialDay]);
+  }, [post, isOpen, initialDay, initialMonthIndex]);
 
   if (!isOpen) return null;
 
@@ -84,16 +110,19 @@ export const PostModal: React.FC<PostModalProps> = ({
     }
     setIsGeneratingAi(true);
     try {
+      const token = localStorage.getItem('session_token');
       const res = await fetch('/api/generate-post', {
         method: 'POST',
+        credentials: 'include',
         headers: {
           'Content-Type': 'application/json',
+          ...(token ? { Authorization: `Bearer ${token}` } : {}),
         },
         body: JSON.stringify({
           topic: title,
           conference: CONFERENCE_CONFIGS[conference].label,
           tag: TAG_CONFIGS[tags[0] || 'social'].label,
-          monthName: selectedMonthName,
+          monthName: displayedMonthName,
         }),
       });
       if (res.status === 401) {
@@ -128,6 +157,7 @@ export const PostModal: React.FC<PostModalProps> = ({
       title: title.trim() || 'Новая публикация',
       conference,
       tags,
+      monthIndex: Number(monthIndex),
       day: Number(day),
       time,
       status,
@@ -151,28 +181,28 @@ export const PostModal: React.FC<PostModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/70 backdrop-blur-sm overflow-y-auto">
-      <div className="bg-white border border-black/10 rounded-3xl w-full max-w-2xl overflow-hidden shadow-2xl my-8">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-slate-950/70 backdrop-blur-sm overflow-y-auto">
+      <div className="bg-white border border-black/10 rounded-2xl sm:rounded-3xl w-full max-w-2xl overflow-hidden shadow-2xl my-4 sm:my-8 max-h-[94vh] flex flex-col">
         {/* Header */}
-        <div className="px-6 py-5 bg-slate-950 text-white flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center font-serif italic text-amber-300 font-bold">
+        <div className="px-4 sm:px-6 py-3.5 sm:py-5 bg-slate-950 text-white flex items-center justify-between shrink-0">
+          <div className="flex items-center gap-2.5 sm:gap-3 min-w-0">
+            <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-white/10 flex items-center justify-center font-serif italic text-amber-300 font-bold shrink-0">
               C
             </div>
-            <h3 className="text-lg font-serif italic tracking-tight">
-              {post ? 'Редактировать публикацию' : 'Новая публикация'} • <span className="not-italic text-slate-300 font-sans text-sm font-bold uppercase tracking-wider">{selectedMonthName}</span>
+            <h3 className="text-sm sm:text-lg font-serif italic tracking-tight truncate">
+              {post ? 'Редактировать публикацию' : 'Новая публикация'} • <span className="not-italic text-slate-300 font-sans text-xs sm:text-sm font-bold uppercase tracking-wider">{displayedMonthName}</span>
             </h3>
           </div>
           <button
             onClick={onClose}
-            className="w-8 h-8 rounded-full border border-white/20 flex items-center justify-center text-slate-300 hover:bg-white hover:text-slate-950 transition-all cursor-pointer"
+            className="w-7 h-7 sm:w-8 sm:h-8 rounded-full border border-white/20 flex items-center justify-center text-slate-300 hover:bg-white hover:text-slate-950 transition-all cursor-pointer shrink-0 ml-2"
           >
-            <X className="w-4 h-4" />
+            <X className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
           </button>
         </div>
 
         {/* Form Body */}
-        <form onSubmit={handleSave} className="p-6 space-y-5">
+        <form onSubmit={handleSave} className="p-4 sm:p-6 space-y-4 sm:space-y-5 overflow-y-auto flex-1">
           <div>
             <label className="block text-[10px] font-bold uppercase tracking-widest text-slate-500 mb-1.5">
               Тема / Заголовок поста *
@@ -183,7 +213,7 @@ export const PostModal: React.FC<PostModalProps> = ({
               value={title}
               onChange={(e) => setTitle(e.target.value)}
               placeholder="Например: Анонс спикеров секции Системный анализ..."
-              className="w-full px-4 py-3 rounded-2xl border border-black/10 bg-[#F8F9FA] text-slate-950 font-medium focus:ring-2 focus:ring-slate-950 outline-none"
+              className="w-full px-3.5 sm:px-4 py-2.5 sm:py-3 rounded-xl sm:rounded-2xl border border-black/10 bg-[#F8F9FA] text-slate-950 font-medium focus:ring-2 focus:ring-slate-950 outline-none text-xs sm:text-sm"
             />
           </div>
 
@@ -201,15 +231,19 @@ export const PostModal: React.FC<PostModalProps> = ({
                     key={confKey}
                     type="button"
                     onClick={() => setConference(confKey)}
-                    className={`p-3 rounded-2xl border text-center transition-all flex flex-col items-center justify-center cursor-pointer ${
+                    title={`${conf.name} — ${conf.description}`}
+                    className={`p-2 sm:p-2.5 rounded-xl sm:rounded-2xl border text-center transition-all flex flex-col items-center justify-center cursor-pointer ${
                       isSelected
                         ? `ring-2 ring-slate-950 ${conf.bgColor} border-slate-950 shadow-xs`
                         : 'border-black/10 hover:bg-slate-50'
                     }`}
                   >
-                    <div className={`text-sm font-black ${conf.textColor}`}>{conf.shortLabel}</div>
-                    <div className="text-[9px] font-bold text-slate-500 truncate w-full mt-0.5">
+                    <div className={`text-xs sm:text-sm font-black ${conf.textColor}`}>{conf.shortLabel}</div>
+                    <div className="text-[8px] sm:text-[9px] font-bold text-slate-700 truncate w-full mt-0.5">
                       {conf.name}
+                    </div>
+                    <div className="text-[7.5px] sm:text-[8px] text-slate-400 font-medium truncate w-full">
+                      {conf.description}
                     </div>
                   </button>
                 );
@@ -221,7 +255,7 @@ export const PostModal: React.FC<PostModalProps> = ({
             <label className="block text-[10px] font-bold uppercase tracking-widest text-slate-500 mb-1.5">
               Канал / Формат контента * (можно несколько)
             </label>
-            <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-1.5 sm:gap-2">
               {(Object.keys(TAG_CONFIGS) as TagType[]).map((tagKey) => {
                 const config = TAG_CONFIGS[tagKey];
                 const isSelected = tags.includes(tagKey);
@@ -236,7 +270,7 @@ export const PostModal: React.FC<PostModalProps> = ({
                         setTags([...tags, tagKey]);
                       }
                     }}
-                    className={`p-2.5 rounded-full border text-xs font-bold uppercase tracking-wider transition-all flex items-center justify-center gap-2 cursor-pointer ${
+                    className={`p-2 sm:p-2.5 rounded-full border text-[11px] sm:text-xs font-bold uppercase tracking-wider transition-all flex items-center justify-center gap-1.5 cursor-pointer ${
                       isSelected
                         ? 'ring-2 ring-slate-950 shadow-xs'
                         : 'border-black/10 hover:bg-slate-50'
@@ -254,9 +288,25 @@ export const PostModal: React.FC<PostModalProps> = ({
             </div>
           </div>
 
-          <div className="grid grid-cols-3 gap-3">
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-3">
             <div>
-              <label className="block text-[9px] font-bold uppercase tracking-widest text-slate-500 mb-1">
+              <label className="block text-[8.5px] sm:text-[9px] font-bold uppercase tracking-widest text-slate-500 mb-1">
+                Месяц *
+              </label>
+              <select
+                value={monthIndex}
+                onChange={(e) => setMonthIndex(Number(e.target.value))}
+                className="w-full px-2 sm:px-2.5 py-2 sm:py-2.5 rounded-xl sm:rounded-2xl border border-black/10 bg-[#F8F9FA] text-slate-950 text-[11px] sm:text-xs font-bold outline-none cursor-pointer focus:ring-2 focus:ring-slate-950"
+              >
+                {monthOptions.map((m) => (
+                  <option key={m.index} value={m.index}>
+                    {m.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div>
+              <label className="block text-[8.5px] sm:text-[9px] font-bold uppercase tracking-widest text-slate-500 mb-1">
                 День (1-31)
               </label>
               <input
@@ -265,11 +315,11 @@ export const PostModal: React.FC<PostModalProps> = ({
                 max="31"
                 value={day}
                 onChange={(e) => setDay(Number(e.target.value))}
-                className="w-full px-3 py-2.5 rounded-2xl border border-black/10 bg-[#F8F9FA] text-slate-950 text-xs font-bold"
+                className="w-full px-2.5 sm:px-3 py-2 sm:py-2.5 rounded-xl sm:rounded-2xl border border-black/10 bg-[#F8F9FA] text-slate-950 text-xs font-bold"
               />
             </div>
             <div>
-              <label className="block text-[9px] font-bold uppercase tracking-widest text-slate-500 mb-1">
+              <label className="block text-[8.5px] sm:text-[9px] font-bold uppercase tracking-widest text-slate-500 mb-1">
                 Время
               </label>
               <input
@@ -277,22 +327,22 @@ export const PostModal: React.FC<PostModalProps> = ({
                 value={time}
                 onChange={(e) => setTime(e.target.value)}
                 placeholder="12:00"
-                className="w-full px-3 py-2.5 rounded-2xl border border-black/10 bg-[#F8F9FA] text-slate-950 text-xs font-bold"
+                className="w-full px-2.5 sm:px-3 py-2 sm:py-2.5 rounded-xl sm:rounded-2xl border border-black/10 bg-[#F8F9FA] text-slate-950 text-xs font-bold"
               />
             </div>
             <div>
-              <label className="block text-[9px] font-bold uppercase tracking-widest text-slate-500 mb-1">
+              <label className="block text-[8.5px] sm:text-[9px] font-bold uppercase tracking-widest text-slate-500 mb-1">
                 Статус
               </label>
               <select
                 value={status}
                 onChange={(e) => setStatus(e.target.value as PostStatus)}
-                className="w-full px-3 py-2.5 rounded-2xl border border-black/10 bg-[#F8F9FA] text-slate-950 text-xs font-bold outline-none"
+                className="w-full px-2 sm:px-3 py-2 sm:py-2.5 rounded-xl sm:rounded-2xl border border-black/10 bg-[#F8F9FA] text-slate-950 text-[11px] sm:text-xs font-bold outline-none cursor-pointer"
               >
                 <option value="idea">Идея</option>
                 <option value="in_progress">В работе</option>
-                <option value="scheduled">Запланирован</option>
-                <option value="published">Опубликован</option>
+                <option value="scheduled">В плане</option>
+                <option value="published">Готово</option>
               </select>
             </div>
           </div>
@@ -306,55 +356,55 @@ export const PostModal: React.FC<PostModalProps> = ({
               value={description}
               onChange={(e) => setDescription(e.target.value)}
               placeholder="Заметки по спикерам, ссылки, темы..."
-              className="w-full px-4 py-2.5 rounded-2xl border border-black/10 bg-[#F8F9FA] text-slate-950 text-xs font-medium focus:ring-2 focus:ring-slate-950 outline-none"
+              className="w-full px-3.5 sm:px-4 py-2 sm:py-2.5 rounded-xl sm:rounded-2xl border border-black/10 bg-[#F8F9FA] text-slate-950 text-xs font-medium focus:ring-2 focus:ring-slate-950 outline-none"
             />
           </div>
 
           {/* Gemini AI Content Assistant Section */}
-          <div className="p-4 rounded-2xl bg-slate-950 text-white space-y-3 shadow-md">
-            <div className="flex items-center justify-between">
+          <div className="p-3 sm:p-4 rounded-xl sm:rounded-2xl bg-slate-950 text-white space-y-2.5 sm:space-y-3 shadow-md">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
               <div className="flex items-center gap-2">
-                <Sparkles className="w-4 h-4 text-amber-300" />
-                <span className="text-xs font-bold uppercase tracking-wider">
-                  Gemini AI Копирайтер ИТ-Конференций
+                <Sparkles className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-amber-300 shrink-0" />
+                <span className="text-[11px] sm:text-xs font-bold uppercase tracking-wider">
+                  Gemini AI Копирайтер
                 </span>
               </div>
               <button
                 type="button"
                 onClick={handleGenerateAiCopy}
                 disabled={isGeneratingAi}
-                className="px-4 py-1.5 rounded-full bg-white text-slate-950 text-xs font-bold uppercase tracking-wider hover:bg-slate-100 transition-all flex items-center gap-1.5 cursor-pointer disabled:opacity-50"
+                className="px-3 sm:px-4 py-1.5 rounded-full bg-white text-slate-950 text-[11px] sm:text-xs font-bold uppercase tracking-wider hover:bg-slate-100 transition-all flex items-center justify-center gap-1.5 cursor-pointer disabled:opacity-50 self-start sm:self-auto"
               >
                 <Sparkles className="w-3.5 h-3.5" />
                 <span>{isGeneratingAi ? 'Генерирую...' : 'Сгенерировать пост'}</span>
               </button>
             </div>
             {aiDraft && (
-              <div className="p-3.5 bg-slate-900 rounded-2xl border border-slate-800 text-xs space-y-2">
-                <div className="font-serif italic text-amber-300 text-base">
+              <div className="p-3 sm:p-3.5 bg-slate-900 rounded-xl sm:rounded-2xl border border-slate-800 text-xs space-y-2">
+                <div className="font-serif italic text-amber-300 text-sm sm:text-base">
                   {aiDraft.headline}
                 </div>
-                <div className="text-slate-300 whitespace-pre-line leading-relaxed max-h-36 overflow-y-auto font-medium">
+                <div className="text-slate-300 whitespace-pre-line leading-relaxed max-h-36 overflow-y-auto font-medium text-[11px] sm:text-xs">
                   {aiDraft.contentText}
                 </div>
                 {aiDraft.callToAction && (
-                  <div className="font-bold text-sky-400">
+                  <div className="font-bold text-sky-400 text-[11px] sm:text-xs">
                     CTA: {aiDraft.callToAction}
                   </div>
                 )}
                 {aiDraft.hashtags && aiDraft.hashtags.length > 0 && (
-                  <div className="text-[10px] text-slate-400">
+                  <div className="text-[9px] sm:text-[10px] text-slate-400">
                     {aiDraft.hashtags.join(' ')}
                   </div>
                 )}
-                <div className="flex items-center justify-between pt-2 border-t border-slate-800">
-                  <span className="text-[10px] text-slate-400">
+                <div className="flex items-center justify-between pt-2 border-t border-slate-800 flex-wrap gap-1">
+                  <span className="text-[9px] sm:text-[10px] text-slate-400">
                     Лучшее время: <strong className="text-white">{aiDraft.bestPostingTime}</strong>
                   </span>
                   <button
                     type="button"
                     onClick={handleCopyAiContent}
-                    className="flex items-center gap-1 text-[10px] font-bold uppercase tracking-widest text-amber-300 hover:underline cursor-pointer"
+                    className="flex items-center gap-1 text-[9px] sm:text-[10px] font-bold uppercase tracking-widest text-amber-300 hover:underline cursor-pointer"
                   >
                     {copiedText ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
                     <span>{copiedText ? 'Скопировано!' : 'Скопировать'}</span>
@@ -365,10 +415,10 @@ export const PostModal: React.FC<PostModalProps> = ({
           </div>
 
           {/* Footer Actions */}
-          <div className="pt-3 border-t border-black/5 flex items-center justify-between gap-3">
+          <div className="pt-3 border-t border-black/5 flex flex-wrap items-center justify-between gap-2.5">
             {post && onDelete ? (
               confirmDelete ? (
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-1.5">
                   <span className="text-xs text-rose-600 font-bold">Удалить?</span>
                   <button
                     type="button"
@@ -392,7 +442,7 @@ export const PostModal: React.FC<PostModalProps> = ({
                 <button
                   type="button"
                   onClick={() => setConfirmDelete(true)}
-                  className="px-4 py-2 rounded-full border border-rose-200 text-rose-600 text-xs font-bold uppercase tracking-wider hover:bg-rose-50 transition-all flex items-center gap-1.5 cursor-pointer"
+                  className="px-3 sm:px-4 py-1.5 sm:py-2 rounded-full border border-rose-200 text-rose-600 text-xs font-bold uppercase tracking-wider hover:bg-rose-50 transition-all flex items-center gap-1.5 cursor-pointer"
                 >
                   <Trash2 className="w-3.5 h-3.5" />
                   <span className="hidden sm:inline">Удалить</span>
@@ -402,17 +452,17 @@ export const PostModal: React.FC<PostModalProps> = ({
               <div />
             )}
 
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 ml-auto">
               <button
                 type="button"
                 onClick={onClose}
-                className="px-5 py-2 rounded-full border border-black/10 text-slate-600 text-xs font-bold uppercase tracking-wider hover:bg-slate-50 transition-all cursor-pointer"
+                className="px-4 sm:px-5 py-2 rounded-full border border-black/10 text-slate-600 text-xs font-bold uppercase tracking-wider hover:bg-slate-50 transition-all cursor-pointer"
               >
                 Отмена
               </button>
               <button
                 type="submit"
-                className="px-6 py-2 rounded-full bg-slate-950 text-white text-xs font-bold uppercase tracking-wider hover:opacity-90 transition-all shadow-md cursor-pointer"
+                className="px-5 sm:px-6 py-2 rounded-full bg-slate-950 text-white text-xs font-bold uppercase tracking-wider hover:opacity-90 transition-all shadow-md cursor-pointer"
               >
                 Сохранить
               </button>

@@ -42,6 +42,7 @@ export interface PostItem {
   tags: TagType[];
   tag?: TagType;
   conference: ConferenceType;
+  monthIndex?: number;
   day: number;
   time?: string;
   description?: string;
@@ -68,6 +69,29 @@ export interface StrategyMeta {
   niche: string;
   targetAudience: string;
   annualGoal: string;
+}
+
+export type IdeaNoteColor = 'amber' | 'blue' | 'emerald' | 'purple' | 'rose' | 'slate';
+export type IdeaNoteStatus = 'idea' | 'in_progress' | 'done';
+
+export interface IdeaNote {
+  id: string;
+  title: string;
+  content: string;
+  conference?: ConferenceType | 'ALL';
+  tags?: string[];
+  status?: IdeaNoteStatus;
+  color?: IdeaNoteColor;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface IdeaSheet {
+  id: string;
+  name: string;
+  icon?: string;
+  notes: IdeaNote[];
+  createdAt: string;
 }
 
 export interface NotificationItem {

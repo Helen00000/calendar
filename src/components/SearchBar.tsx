@@ -1,12 +1,13 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { MonthData, PostItem } from '../types';
+import { MonthData, PostItem, TagType, ConferenceType } from '../types';
 import { TAG_CONFIGS, CONFERENCE_CONFIGS } from '../data/initialData';
-import { Search, X, Calendar } from 'lucide-react';
+import { Search, X, CheckCircle2, Clock } from 'lucide-react';
 
 interface SearchResult {
   post: PostItem;
   monthIndex: number;
   monthName: string;
+  year?: number;
 }
 
 interface SearchBarProps {
@@ -32,7 +33,7 @@ export const SearchBar: React.FC<SearchBarProps> = ({ months, onSelectResult }) 
   }, []);
 
   useEffect(() => {
-    if (query.trim().length < 2) {
+    if (!query || query.trim().length < 2) {
       setResults([]);
       setIsOpen(false);
       return;
@@ -41,47 +42,95 @@ export const SearchBar: React.FC<SearchBarProps> = ({ months, onSelectResult }) 
     const q = query.toLowerCase().trim();
     const found: SearchResult[] = [];
 
-    months.forEach((month) => {
-      month.items.forEach((post) => {
-        const postTags = post.tags?.length ? post.tags : (post.tag ? [post.tag] : ['social']);
-        const matchesTitle = post.title.toLowerCase().includes(q);
-        const matchesDesc = post.description?.toLowerCase().includes(q);
-        const matchesTag = postTags.some((t) => TAG_CONFIGS[t]?.label.toLowerCase().includes(q));
-        const matchesConf = CONFERENCE_CONFIGS[post.conference]?.label.toLowerCase().includes(q);
+    if (!Array.isArray(months)) {
+      setResults([]);
+      return;
+    }
 
-        if (matchesTitle || matchesDesc || matchesTag || matchesConf) {
-          found.push({ post, monthIndex: month.index, monthName: month.name });
+    months.forEach((month) => {
+      if (!month || !Array.isArray(month.items)) return;
+
+      month.items.forEach((post) => {
+        if (!post) return;
+
+        const postTags: string[] = Array.isArray(post.tags) && post.tags.length > 0
+          ? post.tags
+          : (post.tag ? [post.tag] : ['social']);
+
+        const titleStr = typeof post.title === 'string' ? post.title.toLowerCase() : '';
+        const descStr = typeof post.description === 'string' ? post.description.toLowerCase() : '';
+        const contentStr = typeof post.contentText === 'string' ? post.contentText.toLowerCase() : '';
+        const confStr = typeof post.conference === 'string' ? post.conference.toLowerCase() : '';
+        
+        const confConfig = post.conference ? CONFERENCE_CONFIGS[post.conference as ConferenceType] : null;
+        const confLabel = confConfig?.label ? confConfig.label.toLowerCase() : '';
+        const confName = confConfig?.name ? confConfig.name.toLowerCase() : '';
+
+        const matchesTitle = titleStr.includes(q);
+        const matchesDesc = descStr.includes(q);
+        const matchesContent = contentStr.includes(q);
+        const matchesConf = confStr.includes(q) || confLabel.includes(q) || confName.includes(q);
+
+        const matchesTag = postTags.some((t) => {
+          if (!t) return false;
+          const tagConfig = TAG_CONFIGS[t as TagType];
+          const tagLabel = tagConfig?.label ? tagConfig.label.toLowerCase() : '';
+          return tagLabel.includes(q) || String(t).toLowerCase().includes(q);
+        });
+
+        const monthNameStr = typeof month.name === 'string' ? month.name.toLowerCase() : '';
+        const matchesMonth = monthNameStr.includes(q);
+
+        if (matchesTitle || matchesDesc || matchesContent || matchesTag || matchesConf || matchesMonth) {
+          found.push({
+            post,
+            monthIndex: typeof month.index === 'number' ? month.index : 0,
+            monthName: month.name || 'Месяц',
+            year: month.year,
+          });
         }
       });
     });
 
-    setResults(found.slice(0, 8));
+    setResults(found.slice(0, 10));
     setIsOpen(true);
   }, [query, months]);
 
   const handleSelect = (result: SearchResult) => {
+    if (!result || !result.post) return;
     onSelectResult(result.monthIndex, result.post.id);
     setQuery('');
     setIsOpen(false);
   };
 
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Escape') {
+      setIsOpen(false);
+    } else if (e.key === 'Enter' && results.length > 0) {
+      handleSelect(results[0]);
+    }
+  };
+
   return (
     <div ref={containerRef} className="relative w-full max-w-xs">
       <div className="relative">
-        <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+        <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 pointer-events-none" />
         <input
           ref={inputRef}
           type="text"
           value={query}
           onChange={(e) => setQuery(e.target.value)}
-          onFocus={() => query.length >= 2 && setIsOpen(true)}
+          onFocus={() => query.trim().length >= 2 && setIsOpen(true)}
+          onKeyDown={handleKeyDown}
           placeholder="Поиск постов..."
           className="w-full pl-9 pr-8 py-2 rounded-full border border-slate-200 bg-slate-50 text-xs font-medium text-slate-900 placeholder-slate-400 outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-300 transition-all"
         />
         {query && (
           <button
+            type="button"
             onClick={() => { setQuery(''); setIsOpen(false); }}
-            className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 cursor-pointer"
+            className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 cursor-pointer p-0.5"
+            aria-label="Очистить поиск"
           >
             <X className="w-3.5 h-3.5" />
           </button>
@@ -98,36 +147,74 @@ export const SearchBar: React.FC<SearchBarProps> = ({ months, onSelectResult }) 
               </p>
             </div>
           ) : (
-            <div className="max-h-64 overflow-y-auto">
+            <div className="max-h-72 overflow-y-auto divide-y divide-slate-100">
               {results.map((result) => {
-                const confConfig = CONFERENCE_CONFIGS[result.post.conference];
-                const postTags = result.post.tags?.length ? result.post.tags : (result.post.tag ? [result.post.tag] : ['social']);
-                
+                if (!result || !result.post) return null;
+                const post = result.post;
+                const confKey = (post.conference as ConferenceType) || 'AD';
+                const confConfig = CONFERENCE_CONFIGS[confKey] || {
+                  id: confKey,
+                  label: post.conference || 'Конференция',
+                  shortLabel: post.conference || 'CONF',
+                  name: post.conference || 'Конференция',
+                  color: '#6366F1',
+                  bgColor: 'bg-indigo-50 text-indigo-700',
+                  borderColor: 'border-indigo-400',
+                  textColor: 'text-indigo-700',
+                  description: '',
+                };
+
+                const postTags: string[] = Array.isArray(post.tags) && post.tags.length > 0
+                  ? post.tags
+                  : (post.tag ? [post.tag] : ['social']);
+
                 return (
                   <button
-                    key={result.post.id}
+                    key={post.id || `${result.monthIndex}-${post.day}-${post.title}`}
+                    type="button"
                     onClick={() => handleSelect(result)}
-                    className="w-full px-4 py-3 text-left hover:bg-slate-50 transition-colors border-b border-slate-100 last:border-0 cursor-pointer"
+                    className="w-full px-3.5 py-2.5 text-left hover:bg-slate-50 active:bg-slate-100 transition-colors cursor-pointer block group"
                   >
-                    <div className="flex items-center gap-2 mb-1">
-                      <span className={`text-[9px] font-black uppercase px-1.5 py-0.5 rounded ${confConfig.bgColor}`}>
-                        {result.post.conference}
+                    <div className="flex items-center gap-1.5 mb-1 flex-wrap">
+                      <span className={`text-[9px] font-black uppercase px-1.5 py-0.5 rounded ${confConfig.bgColor || 'bg-slate-100 text-slate-800'}`}>
+                        {confConfig.shortLabel || post.conference || 'AD'}
                       </span>
-                      <div className="flex gap-0.5">
-                        {postTags.map((t) => (
-                          <span
-                            key={t}
-                            className="w-2 h-2 rounded-full"
-                            style={{ backgroundColor: TAG_CONFIGS[t]?.color || '#64748B' }}
-                            title={TAG_CONFIGS[t]?.label}
-                          />
-                        ))}
+                      <div className="flex items-center gap-1">
+                        {postTags.map((t) => {
+                          const tagConfig = TAG_CONFIGS[t as TagType];
+                          return (
+                            <span
+                              key={t}
+                              className="w-2 h-2 rounded-full inline-block shrink-0"
+                              style={{ backgroundColor: tagConfig?.color || '#64748B' }}
+                              title={tagConfig?.label || t}
+                            />
+                          );
+                        })}
                       </div>
-                      <span className="text-[10px] text-slate-400 font-medium">
-  {result.month.year ?? ''} • {result.monthName}, день {result.post.day}
-</span>
+                      <span className="text-[10px] text-slate-400 font-medium truncate">
+                        {result.year ? `${result.year} • ` : ''}{result.monthName}{post.day ? `, день ${post.day}` : ''}
+                      </span>
+                      {post.status === 'published' ? (
+                        <span className="ml-auto text-[8.5px] font-bold text-emerald-700 bg-emerald-50 px-1 py-0.2 rounded flex items-center gap-0.5">
+                          <CheckCircle2 className="w-2.5 h-2.5" />
+                          Готово
+                        </span>
+                      ) : (
+                        <span className="ml-auto text-[8.5px] font-bold text-slate-500 bg-slate-100 px-1 py-0.2 rounded flex items-center gap-0.5">
+                          <Clock className="w-2.5 h-2.5" />
+                          Запланирован
+                        </span>
+                      )}
                     </div>
-                    <p className="text-xs font-bold text-slate-900 truncate">{result.post.title}</p>
+                    <p className="text-xs font-bold text-slate-900 truncate group-hover:text-indigo-600 transition-colors">
+                      {post.title || 'Без названия'}
+                    </p>
+                    {post.description ? (
+                      <p className="text-[11px] text-slate-500 line-clamp-1 mt-0.5">
+                        {post.description}
+                      </p>
+                    ) : null}
                   </button>
                 );
               })}

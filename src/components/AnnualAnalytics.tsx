@@ -55,30 +55,30 @@ export const AnnualAnalytics: React.FC<AnnualAnalyticsProps> = ({ months, year }
   );
 
   return (
-    <div className="w-full bg-[#F8F9FA] rounded-3xl border border-black/5 shadow-xl p-6 sm:p-8 my-8">
+    <div className="w-full bg-[#F8F9FA] rounded-2xl sm:rounded-3xl border border-black/5 shadow-xl p-4 sm:p-6 lg:p-8 my-6 sm:my-8">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8 pb-6 border-b border-black/5">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 sm:mb-8 pb-4 sm:pb-6 border-b border-black/5">
         <div>
-          <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-slate-500 mb-1">
-            <BarChart3 className="w-4 h-4 text-slate-900" />
+          <div className="flex items-center gap-2 text-[10px] sm:text-xs font-bold uppercase tracking-widest text-slate-500 mb-1">
+            <BarChart3 className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-slate-900" />
             <span>Аналитика ИТ-Конференций</span>
           </div>
-          <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-950">
+          <h2 className="text-xl sm:text-2xl lg:text-3xl font-extrabold text-slate-950">
             Аналитика контента {displayYear}: AD • SQA • TWD
           </h2>
         </div>
-        <div className="flex items-center gap-3">
-          <div className="px-5 py-2.5 rounded-full bg-white border border-black/5 text-center shadow-2xs">
-            <div className="text-[9px] text-slate-400 font-bold uppercase tracking-widest">Всего публикаций</div>
-            <div className="text-lg font-black text-slate-950">{totalPublications}</div>
+        <div className="grid grid-cols-2 sm:flex sm:items-center gap-2 sm:gap-3 w-full sm:w-auto">
+          <div className="px-3.5 sm:px-5 py-2 sm:py-2.5 rounded-2xl sm:rounded-full bg-white border border-black/5 text-center shadow-2xs">
+            <div className="text-[8px] sm:text-[9px] text-slate-400 font-bold uppercase tracking-widest">Всего публикаций</div>
+            <div className="text-base sm:text-lg font-black text-slate-950">{totalPublications}</div>
           </div>
-          <div className="px-5 py-2.5 rounded-full bg-emerald-50 border border-emerald-200 text-center shadow-2xs">
-            <div className="text-[9px] text-emerald-600 font-bold uppercase tracking-widest">
+          <div className="px-3.5 sm:px-5 py-2 sm:py-2.5 rounded-2xl sm:rounded-full bg-emerald-50 border border-emerald-200 text-center shadow-2xs">
+            <div className="text-[8px] sm:text-[9px] text-emerald-600 font-bold uppercase tracking-widest">
               Опубликовано
             </div>
-            <div className="text-lg font-black text-emerald-600">
+            <div className="text-base sm:text-lg font-black text-emerald-600">
               {publishedPublications}{' '}
-              <span className="text-xs font-normal">
+              <span className="text-[10px] sm:text-xs font-normal">
                 ({totalPublications > 0 ? Math.round((publishedPublications / totalPublications) * 100) : 0}%)
               </span>
             </div>
@@ -86,15 +86,20 @@ export const AnnualAnalytics: React.FC<AnnualAnalyticsProps> = ({ months, year }
         </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        <div className="lg:col-span-2 space-y-8">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 sm:gap-8">
+        <div className="lg:col-span-2 space-y-6 sm:space-y-8">
           {/* Monthly Posts Volume Chart */}
-          <div className="space-y-4">
+          <div className="space-y-3 sm:space-y-4">
             <div className="flex flex-wrap items-center justify-between gap-2">
-              <h3 className="text-xs font-bold uppercase tracking-widest text-slate-900 flex items-center gap-2">
-                <TrendingUp className="w-4 h-4 text-slate-950" />
-                <span>Объем Публикаций по Месяцам и Каналам</span>
-              </h3>
+              <div className="flex items-center gap-2">
+                <h3 className="text-xs font-bold uppercase tracking-widest text-slate-900 flex items-center gap-2">
+                  <TrendingUp className="w-4 h-4 text-slate-950" />
+                  <span>Объем Публикаций по Месяцам</span>
+                </h3>
+                <span className="sm:hidden text-[10px] font-bold text-slate-600">
+                  ↔ скролл
+                </span>
+              </div>
               <div className="flex flex-wrap items-center gap-2 text-[10px] font-bold">
                 {(Object.keys(TAG_CONFIGS) as TagType[]).map((tagKey) => {
                   const cfg = TAG_CONFIGS[tagKey];
@@ -111,73 +116,75 @@ export const AnnualAnalytics: React.FC<AnnualAnalyticsProps> = ({ months, year }
               </div>
             </div>
 
-            <div className="h-56 flex items-end justify-between gap-1.5 sm:gap-2 pt-10 pb-2 px-2 border-b border-black/5 bg-white/50 rounded-2xl p-4">
-              {yearMonths.map((m) => {
-                const monthTotalPubs = m.items.reduce(
-                  (acc, item) => acc + (item.tags?.length || (item.tag ? 1 : 1)),
-                  0
-                );
-                const heightPercent = Math.max(
-                  Math.round((monthTotalPubs / maxMonthlyPublications) * 100),
-                  8
-                );
-                const monthTagCounts: Partial<Record<TagType, number>> = {};
-                m.items.forEach((item) => {
-                  const postTags = item.tags?.length ? item.tags : (item.tag ? [item.tag] : ['social']);
-                  postTags.forEach((t) => {
-                    monthTagCounts[t] = (monthTagCounts[t] || 0) + 1;
+            <div className="overflow-x-auto pb-1.5 -mx-1 px-1 sm:mx-0 sm:px-0">
+              <div className="h-52 sm:h-56 flex items-end justify-between gap-1.5 sm:gap-2 pt-8 sm:pt-10 pb-2 px-2 sm:px-3 border-b border-black/5 bg-white/50 rounded-2xl min-w-[560px] sm:min-w-full">
+                {yearMonths.map((m) => {
+                  const monthTotalPubs = m.items.reduce(
+                    (acc, item) => acc + (item.tags?.length || (item.tag ? 1 : 1)),
+                    0
+                  );
+                  const heightPercent = Math.max(
+                    Math.round((monthTotalPubs / maxMonthlyPublications) * 100),
+                    8
+                  );
+                  const monthTagCounts: Partial<Record<TagType, number>> = {};
+                  m.items.forEach((item) => {
+                    const postTags = item.tags?.length ? item.tags : (item.tag ? [item.tag] : ['social']);
+                    postTags.forEach((t) => {
+                      monthTagCounts[t] = (monthTagCounts[t] || 0) + 1;
+                    });
                   });
-                });
-                const activeTags = (Object.keys(monthTagCounts) as TagType[]).filter(
-                  (t) => (monthTagCounts[t] || 0) > 0
-                );
-                const tooltipDetails =
-                  activeTags.length > 0
-                    ? activeTags.map((t) => `${TAG_CONFIGS[t]?.label}: ${monthTagCounts[t]}`).join(', ')
-                    : 'Нет постов';
+                  const activeTags = (Object.keys(monthTagCounts) as TagType[]).filter(
+                    (t) => (monthTagCounts[t] || 0) > 0
+                  );
+                  const tooltipDetails =
+                    activeTags.length > 0
+                      ? activeTags.map((t) => `${TAG_CONFIGS[t]?.label}: ${monthTagCounts[t]}`).join(', ')
+                      : 'Нет постов';
 
-                return (
-                  <div
-                    key={m.index}
-                    className="flex-1 flex flex-col items-center gap-2 group relative h-full justify-end"
-                  >
-                    <div className="opacity-0 group-hover:opacity-100 absolute -top-12 bg-slate-950 text-white text-[10px] font-bold px-3 py-1.5 rounded-xl pointer-events-none transition-opacity z-20 whitespace-nowrap shadow-lg text-center">
-                      <div className="font-extrabold">
-                        {m.name}: {monthTotalPubs} публ.
-                      </div>
-                      <div className="text-[9px] text-slate-300 font-normal">{tooltipDetails}</div>
-                    </div>
+                  return (
                     <div
-                      className="w-full max-w-[28px] rounded-t-lg overflow-hidden flex flex-col-reverse bg-slate-200 transition-all shadow-2xs"
-                      style={{ height: `${heightPercent}%` }}
+                      key={m.index}
+                      className="flex-1 flex flex-col items-center gap-1.5 sm:gap-2 group relative h-full justify-end min-w-[36px] sm:min-w-0"
                     >
-                      {monthTotalPubs > 0 ? (
-                        activeTags.map((tagKey) => {
-                          const tagCount = monthTagCounts[tagKey] || 0;
-                          const tagPercent = (tagCount / monthTotalPubs) * 100;
-                          const tagConfig = TAG_CONFIGS[tagKey];
-                          return (
-                            <div
-                              key={tagKey}
-                              className="w-full transition-all hover:brightness-125 relative group/tag"
-                              style={{
-                                height: `${tagPercent}%`,
-                                backgroundColor: tagConfig?.color || '#64748B',
-                              }}
-                              title={`${tagConfig?.label}: ${tagCount}`}
-                            />
-                          );
-                        })
-                      ) : (
-                        <div className="w-full h-full bg-slate-200/50" />
-                      )}
+                      <div className="opacity-0 group-hover:opacity-100 absolute -top-12 bg-slate-950 text-white text-[10px] font-bold px-3 py-1.5 rounded-xl pointer-events-none transition-opacity z-20 whitespace-nowrap shadow-lg text-center">
+                        <div className="font-extrabold">
+                          {m.name}: {monthTotalPubs} публ.
+                        </div>
+                        <div className="text-[9px] text-slate-300 font-normal">{tooltipDetails}</div>
+                      </div>
+                      <div
+                        className="w-full max-w-[26px] sm:max-w-[28px] rounded-t-lg overflow-hidden flex flex-col-reverse bg-slate-200 transition-all shadow-2xs"
+                        style={{ height: `${heightPercent}%` }}
+                      >
+                        {monthTotalPubs > 0 ? (
+                          activeTags.map((tagKey) => {
+                            const tagCount = monthTagCounts[tagKey] || 0;
+                            const tagPercent = (tagCount / monthTotalPubs) * 100;
+                            const tagConfig = TAG_CONFIGS[tagKey];
+                            return (
+                              <div
+                                key={tagKey}
+                                className="w-full transition-all hover:brightness-125 relative group/tag"
+                                style={{
+                                  height: `${tagPercent}%`,
+                                  backgroundColor: tagConfig?.color || '#64748B',
+                                }}
+                                title={`${tagConfig?.label}: ${tagCount}`}
+                              />
+                            );
+                          })
+                        ) : (
+                          <div className="w-full h-full bg-slate-200/50" />
+                        )}
+                      </div>
+                      <span className="text-[10.5px] sm:text-[10px] font-bold uppercase tracking-wider text-slate-600 whitespace-nowrap">
+                        {m.shortName}
+                      </span>
                     </div>
-                    <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500">
-                      {m.shortName}
-                    </span>
-                  </div>
-                );
-              })}
+                  );
+                })}
+              </div>
             </div>
           </div>
 
@@ -215,7 +222,7 @@ export const AnnualAnalytics: React.FC<AnnualAnalyticsProps> = ({ months, year }
                       />
                     </div>
                     <p className="text-[10px] text-slate-500 font-medium line-clamp-1">
-                      {conf.name}
+                      {conf.name} — {conf.description}
                     </p>
                   </div>
                 );

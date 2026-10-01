@@ -120,10 +120,13 @@ if (e) e.preventDefault();
 setIsLoading(true);
 try {
 const summaryText = `Всего публикаций в плане: ${totalPosts}. По конференциям: Analyst Days (${adCount}), SQA Days (${sqaCount}), TechWriter Days (${twdCount}).`;
+        const token = localStorage.getItem('session_token');
         const res = await fetch('/api/generate-suggestions', {
           method: 'POST',
+          credentials: 'include',
           headers: {
             'Content-Type': 'application/json',
+            ...(token ? { Authorization: `Bearer ${token}` } : {}),
           },
           body: JSON.stringify({
             monthsSummary: summaryText,
@@ -241,62 +244,62 @@ setAcceptedCount(0);
 };
 
 return (
-<div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/70 backdrop-blur-md overflow-y-auto">
-<div className="bg-white border border-slate-200 rounded-3xl w-full max-w-4xl overflow-hidden shadow-2xl my-6 flex flex-col max-h-[90vh]">
+<div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-slate-950/70 backdrop-blur-md overflow-y-auto">
+<div className="bg-white border border-slate-200 rounded-2xl sm:rounded-3xl w-full max-w-4xl overflow-hidden shadow-2xl my-4 sm:my-6 flex flex-col max-h-[92vh]">
 {/* Modal Header */}
-<div className="px-6 py-5 bg-gradient-to-r from-slate-950 via-slate-900 to-indigo-950 text-white flex items-center justify-between shrink-0">
-<div className="flex items-center gap-3">
-<div className="w-10 h-10 rounded-2xl bg-indigo-600/30 ring-1 ring-indigo-400/30 flex items-center justify-center text-amber-300 shadow-inner">
-<Sparkles className="w-5 h-5 text-amber-300" />
+<div className="px-4 sm:px-6 py-3.5 sm:py-5 bg-gradient-to-r from-slate-950 via-slate-900 to-indigo-950 text-white flex items-center justify-between shrink-0">
+<div className="flex items-center gap-2.5 sm:gap-3 min-w-0">
+<div className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl sm:rounded-2xl bg-indigo-600/30 ring-1 ring-indigo-400/30 flex items-center justify-center text-amber-300 shadow-inner shrink-0">
+<Sparkles className="w-4 h-4 sm:w-5 sm:h-5 text-amber-300" />
 </div>
-<div>
-<h3 className="text-lg font-black tracking-tight flex items-center gap-2">
+<div className="min-w-0">
+<h3 className="text-base sm:text-lg font-black tracking-tight flex items-center gap-2 flex-wrap">
 <span>ИИ Контент-Консультант</span>
-<span className="text-[10px] font-bold uppercase tracking-wider bg-indigo-500/30 text-indigo-200 px-2 py-0.5 rounded-md border border-indigo-400/20">
+<span className="text-[9px] sm:text-[10px] font-bold uppercase tracking-wider bg-indigo-500/30 text-indigo-200 px-2 py-0.5 rounded-md border border-indigo-400/20">
 Подсказки & Настройка
 </span>
 </h3>
-<p className="text-xs text-slate-300 font-medium">
-Анализирует текущие посты и предлагает точечные идеи. Вы выбираете, что добавить в план.
+<p className="text-[11px] sm:text-xs text-slate-300 font-medium truncate sm:whitespace-normal">
+Анализирует текущие посты и предлагает точечные идеи.
 </p>
 </div>
 </div>
 <button
 onClick={onClose}
-className="w-9 h-9 rounded-full border border-white/10 flex items-center justify-center text-slate-300 hover:bg-white/10 hover:text-white transition-all cursor-pointer"
+className="w-8 h-8 sm:w-9 sm:h-9 rounded-full border border-white/10 flex items-center justify-center text-slate-300 hover:bg-white/10 hover:text-white transition-all cursor-pointer shrink-0 ml-2"
 >
-<X className="w-5 h-5" />
+<X className="w-4 h-4 sm:w-5 sm:h-5" />
 </button>
 </div>
 
 {/* Modal Body */}
-<div className="p-6 overflow-y-auto space-y-6 flex-1 bg-slate-50/50">
+<div className="p-3.5 sm:p-6 overflow-y-auto space-y-4 sm:space-y-6 flex-1 bg-slate-50/50">
 {/* Quick Analytics Bar */}
-<div className="bg-white rounded-2xl p-4 border border-slate-200 shadow-sm flex flex-wrap items-center justify-between gap-3">
+<div className="bg-white rounded-xl sm:rounded-2xl p-3 sm:p-4 border border-slate-200 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-2 sm:gap-3">
 <div className="flex items-center gap-2">
-<Layers className="w-4 h-4 text-indigo-500" />
-<span className="text-xs font-bold text-slate-700">
+<Layers className="w-4 h-4 text-indigo-500 shrink-0" />
+<span className="text-[11px] sm:text-xs font-bold text-slate-700">
 Текущий баланс плана:
 </span>
-<span className="text-xs font-black text-slate-950 bg-slate-100 px-2 py-0.5 rounded-lg">
-{totalPosts} публикаций
+<span className="text-[11px] sm:text-xs font-black text-slate-950 bg-slate-100 px-2 py-0.5 rounded-lg">
+{totalPosts} постов
 </span>
 </div>
-<div className="flex items-center gap-2">
-<span className="text-xs font-bold text-orange-600 bg-orange-50 px-2 py-0.5 rounded-md border border-orange-200">
+<div className="flex items-center gap-1.5 sm:gap-2 flex-wrap">
+<span className="text-[10px] sm:text-xs font-bold text-orange-600 bg-orange-50 px-2 py-0.5 rounded-md border border-orange-200">
 AD: {adCount}
 </span>
-<span className="text-xs font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-200">
+<span className="text-[10px] sm:text-xs font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-200">
 SQA: {sqaCount}
 </span>
-<span className="text-xs font-bold text-blue-600 bg-blue-50 px-2 py-0.5 rounded-md border border-blue-200">
+<span className="text-[10px] sm:text-xs font-bold text-blue-600 bg-blue-50 px-2 py-0.5 rounded-md border border-blue-200">
 TWD: {twdCount}
 </span>
 </div>
 {acceptedCount > 0 && (
-<div className="flex items-center gap-1.5 text-xs font-bold text-emerald-600 bg-emerald-50 px-3 py-1 rounded-full animate-fade-in">
-<CheckCircle2 className="w-4 h-4" />
-<span>Добавлено {acceptedCount} постов в план</span>
+<div className="flex items-center gap-1.5 text-[11px] sm:text-xs font-bold text-emerald-600 bg-emerald-50 px-2.5 sm:px-3 py-1 rounded-full animate-fade-in self-start sm:self-auto">
+<CheckCircle2 className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+<span>Добавлено {acceptedCount} постов</span>
 </div>
 )}
 </div>
@@ -304,19 +307,19 @@ TWD: {twdCount}
 {/* AI Generator Control Form */}
 <form
 onSubmit={handleGenerateSuggestions}
-className="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm space-y-4"
+className="bg-white border border-slate-200 rounded-xl sm:rounded-2xl p-3.5 sm:p-5 shadow-xs space-y-3 sm:space-y-4"
 >
-<div className="flex items-center justify-between border-b border-slate-100 pb-3">
+<div className="flex items-center justify-between border-b border-slate-100 pb-2.5 sm:pb-3">
 <div className="flex items-center gap-2 text-xs font-black uppercase tracking-wider text-slate-900">
 <SlidersHorizontal className="w-4 h-4 text-indigo-600" />
-<span>Запросить специфические рекомендации ИИ</span>
+<span>Запросить рекомендации ИИ</span>
 </div>
-<span className="text-[11px] text-slate-400 font-medium">Gemini 3.6 Flash</span>
+<span className="text-[10px] sm:text-[11px] text-slate-400 font-medium">Gemini Flash</span>
 </div>
 
-<div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+<div className="grid grid-cols-1 md:grid-cols-2 gap-2.5 sm:gap-3">
 <div>
-<label className="text-[10px] font-bold uppercase tracking-wider text-slate-500 block mb-1">
+<label className="text-[9px] sm:text-[10px] font-bold uppercase tracking-wider text-slate-500 block mb-1">
 Конференция
 </label>
 <select
@@ -325,13 +328,13 @@ onChange={(e) => setTargetConference(e.target.value)}
 className="w-full px-3 py-2 rounded-xl border border-slate-200 bg-slate-50 text-slate-900 text-xs font-medium outline-none focus:ring-2 focus:ring-indigo-500"
 >
 <option value="all">Все конференции (AD, SQA, TWD)</option>
-<option value="AD">Analyst Days (AD)</option>
-<option value="SQA">SQA Days (SQA)</option>
-<option value="TWD">TechWriter Days (TWD)</option>
+<option value="AD">Analyst Days (AD) — по системному и бизнес анализу</option>
+<option value="SQA">SQA Days (SQA) — по тестированию и качеству ПО</option>
+<option value="TWD">TechWriter Days (TWD) — по технической документации</option>
 </select>
 </div>
 <div>
-<label className="text-[10px] font-bold uppercase tracking-wider text-slate-500 block mb-1">
+<label className="text-[9px] sm:text-[10px] font-bold uppercase tracking-wider text-slate-500 block mb-1">
 Месяц публикации
 </label>
 <select
@@ -349,9 +352,9 @@ className="w-full px-3 py-2 rounded-xl border border-slate-200 bg-slate-50 text-
 </div>
 </div>
 
-<div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+<div className="grid grid-cols-1 md:grid-cols-3 gap-2.5 sm:gap-3">
 <div>
-<label className="text-[10px] font-bold uppercase tracking-wider text-slate-500 block mb-1">
+<label className="text-[9px] sm:text-[10px] font-bold uppercase tracking-wider text-slate-500 block mb-1">
 Количество постов
 </label>
 <input
@@ -360,19 +363,19 @@ min={1}
 max={100}
 value={postCount}
 onChange={(e) => setPostCount(Math.max(1, Math.min(100, parseInt(e.target.value, 10) || 6)))}
-className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 bg-slate-50 text-slate-900 text-xs font-bold outline-none focus:ring-2 focus:ring-indigo-500"
+className="w-full px-3 py-2 sm:px-3.5 sm:py-2.5 rounded-xl border border-slate-200 bg-slate-50 text-slate-900 text-xs font-bold outline-none focus:ring-2 focus:ring-indigo-500"
 />
 </div>
 <div className="md:col-span-2">
-<label className="text-[10px] font-bold uppercase tracking-wider text-slate-500 block mb-1">
+<label className="text-[9px] sm:text-[10px] font-bold uppercase tracking-wider text-slate-500 block mb-1">
 Пожелания к публикациям (опционально)
 </label>
 <input
 type="text"
 value={customPrompt}
 onChange={(e) => setCustomPrompt(e.target.value)}
-placeholder="Например: по 3 поста на каждую конференцию (AD, SQA, TWD) в каждом месяце..."
-className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 bg-slate-50 text-slate-900 text-xs font-medium outline-none focus:ring-2 focus:ring-indigo-500"
+placeholder="Например: по 3 поста на каждую конференцию..."
+className="w-full px-3 py-2 sm:px-3.5 sm:py-2.5 rounded-xl border border-slate-200 bg-slate-50 text-slate-900 text-xs font-medium outline-none focus:ring-2 focus:ring-indigo-500"
 />
 </div>
 </div>
@@ -381,61 +384,61 @@ className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 bg-slate-50 t
 <button
 type="submit"
 disabled={isLoading}
-className="px-5 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs shadow-md transition-all flex items-center gap-2 cursor-pointer disabled:opacity-50"
+className="w-full sm:w-auto px-5 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs shadow-md transition-all flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50"
 >
 <Wand2 className="w-4 h-4" />
-<span>{isLoading ? 'ИИ анализирует и генерирует...' : 'Сгенерировать подсказки'}</span>
+<span>{isLoading ? 'Генерирую...' : 'Сгенерировать подсказки'}</span>
 </button>
 </div>
 </form>
 
 {/* Suggestions List Section */}
-<div className="space-y-4">
-<div className="flex items-center justify-between">
+<div className="space-y-3 sm:space-y-4">
+<div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
 <div className="flex items-center gap-2">
 <Lightbulb className="w-4 h-4 text-amber-500" />
-<h4 className="text-sm font-black uppercase tracking-wider text-slate-900">
+<h4 className="text-xs sm:text-sm font-black uppercase tracking-wider text-slate-900">
 Рекомендации ИИ ({suggestions.length})
 </h4>
 </div>
-<div className="flex items-center gap-2">
+<div className="flex flex-wrap items-center gap-2">
 {suggestions.length > 0 && (
 <button
 onClick={handleClearAllSuggestions}
-className="px-3.5 py-1.5 rounded-xl bg-rose-100 text-rose-600 text-xs font-bold transition-all flex items-center gap-1.5 hover:bg-rose-200 border border-rose-200 cursor-pointer"
+className="px-3 py-1.5 rounded-xl bg-rose-100 text-rose-600 text-xs font-bold transition-all flex items-center gap-1.5 hover:bg-rose-200 border border-rose-200 cursor-pointer"
 title="Удалить все подсказки"
 >
 <Trash2 className="w-3.5 h-3.5" />
-<span>Удалить все подсказки</span>
+<span>Очистить</span>
 </button>
 )}
 {suggestions.some((s) => !s.isAccepted) && (
 <button
 onClick={handleAcceptAll}
-className="px-3.5 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold transition-all flex items-center gap-1.5 shadow-sm cursor-pointer"
+className="px-3 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold transition-all flex items-center gap-1.5 shadow-xs cursor-pointer"
 >
 <Check className="w-3.5 h-3.5" />
-<span>Принять все варианты</span>
+<span>Принять все</span>
 </button>
 )}
 </div>
 </div>
 
 {suggestions.length === 0 ? (
-<div className="p-8 text-center bg-white rounded-2xl border border-dashed border-slate-300">
+<div className="p-6 sm:p-8 text-center bg-white rounded-xl sm:rounded-2xl border border-dashed border-slate-300">
 <p className="text-xs text-slate-500 font-medium">
 Нажмите кнопку выше, чтобы ИИ проанализировал стратегию и предложил варианты публикаций.
 </p>
 </div>
 ) : (
-<div className="space-y-3">
+<div className="space-y-2.5 sm:space-y-3">
 {suggestions.map((item) => {
 const confConfig = CONFERENCE_CONFIGS[item.conference];
 const tagConfig = TAG_CONFIGS[item.tag];
 return (
 <div
 key={item.id}
-className={`bg-white rounded-2xl p-5 border transition-all shadow-sm ${
+className={`bg-white rounded-xl sm:rounded-2xl p-3.5 sm:p-5 border transition-all shadow-xs ${
 item.isAccepted
 ? 'border-emerald-500/40 bg-emerald-50/20'
 : 'border-slate-200 hover:border-slate-300'
@@ -476,9 +479,9 @@ e.target.value as ConferenceType
 }
 className="w-full px-2.5 py-1.5 rounded-lg border border-slate-200 bg-slate-50 text-xs font-medium"
 >
-<option value="AD">Analyst Days</option>
-<option value="SQA">SQA Days</option>
-<option value="TWD">TechWriter Days</option>
+<option value="AD">Analyst Days (AD)</option>
+<option value="SQA">SQA Days (SQA)</option>
+<option value="TWD">TechWriter Days (TWD)</option>
 </select>
 </div>
 <div>
@@ -578,38 +581,38 @@ className="px-4 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white
 </div>
 </div>
 ) : (
-<div className="space-y-3">
-<div className="flex flex-wrap items-center justify-between gap-2">
-<div className="flex items-center gap-2">
+<div className="space-y-2.5 sm:space-y-3">
+<div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+<div className="flex items-center gap-1.5 sm:gap-2 flex-wrap">
 <span
-className={`text-[10px] font-black uppercase tracking-wider px-2.5 py-0.5 rounded-full border ${confConfig.bgColor} ${confConfig.borderColor}`}
+className={`text-[9px] sm:text-[10px] font-black uppercase tracking-wider px-2 py-0.5 rounded-full border ${confConfig.bgColor} ${confConfig.borderColor}`}
 >
 {confConfig.label}
 </span>
 <span
-className={`text-[10px] font-bold px-2.5 py-0.5 rounded-full border ${tagConfig.bgColor} ${tagConfig.borderColor}`}
+className={`text-[9px] sm:text-[10px] font-bold px-2 py-0.5 rounded-full border ${tagConfig.bgColor} ${tagConfig.borderColor}`}
 >
 {tagConfig.label}
 </span>
-<span className="text-[10px] font-bold text-slate-600 bg-slate-100 px-2.5 py-0.5 rounded-full flex items-center gap-1 border border-slate-200">
+<span className="text-[9px] sm:text-[10px] font-bold text-slate-600 bg-slate-100 px-2 py-0.5 rounded-full flex items-center gap-1 border border-slate-200">
 <Calendar className="w-3 h-3 text-indigo-500" />
 <span>
 {item.day} {MONTH_NAMES[item.monthIndex]}
 </span>
 </span>
 </div>
-<div className="flex items-center gap-1.5">
+<div className="flex items-center gap-1.5 self-end sm:self-auto">
 {item.isAccepted ? (
-<span className="text-xs font-bold text-emerald-600 bg-emerald-100 px-3 py-1 rounded-xl flex items-center gap-1">
-<CheckCircle2 className="w-4 h-4 text-emerald-500" />
-<span>Принято в план</span>
+<span className="text-[11px] sm:text-xs font-bold text-emerald-600 bg-emerald-100 px-2.5 sm:px-3 py-1 rounded-xl flex items-center gap-1">
+<CheckCircle2 className="w-3.5 h-3.5 text-emerald-500" />
+<span>Принято</span>
 </span>
 ) : (
 <>
 <button
 type="button"
 onClick={() => handleToggleEdit(item.id)}
-className="px-2.5 py-1.5 rounded-xl border border-slate-200 hover:bg-slate-100 text-slate-700 text-xs font-bold transition-all flex items-center gap-1 cursor-pointer"
+className="px-2.5 py-1.5 rounded-xl border border-slate-200 hover:bg-slate-100 text-slate-700 text-[11px] sm:text-xs font-bold transition-all flex items-center gap-1 cursor-pointer"
 title="Настроить параметры перед добавлением"
 >
 <Edit3 className="w-3.5 h-3.5 text-indigo-500" />
@@ -626,7 +629,7 @@ title="Отклонить рекомендацию"
 <button
 type="button"
 onClick={() => handleAcceptSuggestion(item)}
-className="px-4 py-1.5 rounded-xl bg-slate-950 text-white hover:opacity-90 text-xs font-bold transition-all shadow-md flex items-center gap-1.5 cursor-pointer"
+className="px-3.5 sm:px-4 py-1.5 rounded-xl bg-slate-950 text-white hover:opacity-90 text-[11px] sm:text-xs font-bold transition-all shadow-xs flex items-center gap-1.5 cursor-pointer"
 >
 <Check className="w-3.5 h-3.5 text-emerald-400" />
 <span>Принять</span>
@@ -635,16 +638,16 @@ className="px-4 py-1.5 rounded-xl bg-slate-950 text-white hover:opacity-90 text-
 )}
 </div>
 </div>
-<h5 className="text-sm font-black text-slate-950 leading-snug">
+<h5 className="text-xs sm:text-sm font-black text-slate-950 leading-snug">
 {item.title}
 </h5>
 {item.description && (
-<p className="text-xs text-slate-600 font-medium leading-relaxed">
+<p className="text-[11px] sm:text-xs text-slate-600 font-medium leading-relaxed">
 {item.description}
 </p>
 )}
 {item.reason && (
-<div className="bg-indigo-50/70 rounded-xl p-2.5 border border-indigo-100 flex items-start gap-2 text-[11px] text-indigo-950 font-medium">
+<div className="bg-indigo-50/70 rounded-xl p-2 sm:p-2.5 border border-indigo-100 flex items-start gap-2 text-[10px] sm:text-[11px] text-indigo-950 font-medium">
 <Info className="w-3.5 h-3.5 text-indigo-600 shrink-0 mt-0.5" />
 <span>
 <strong className="font-bold">ИИ Инсайт:</strong> {item.reason}
@@ -662,14 +665,14 @@ className="px-4 py-1.5 rounded-xl bg-slate-950 text-white hover:opacity-90 text-
 </div>
 
 {/* Modal Footer */}
-<div className="px-6 py-4 bg-white border-t border-slate-200 flex items-center justify-between shrink-0">
-<p className="text-[11px] text-slate-500 font-medium">
-Все принятые посты мгновенно появляются в карусели и календаре выбранных месяцев.
+<div className="px-4 sm:px-6 py-3 sm:py-4 bg-white border-t border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-2 shrink-0">
+<p className="text-[10px] sm:text-[11px] text-slate-500 font-medium text-center sm:text-left">
+Все принятые посты мгновенно появляются в календаре выбранных месяцев.
 </p>
 <button
 type="button"
 onClick={onClose}
-className="px-5 py-2 rounded-xl bg-slate-900 text-white text-xs font-bold hover:opacity-90 transition-all cursor-pointer"
+className="w-full sm:w-auto px-5 py-2 rounded-xl bg-slate-900 text-white text-xs font-bold hover:opacity-90 transition-all cursor-pointer"
 >
 Готово
 </button>

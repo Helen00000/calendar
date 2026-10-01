@@ -9,11 +9,11 @@ dotenv.config({ path: '.env' });
 
 // 🔒 Безопасность: НИКОГДА не логируем API-ключ (даже его часть)
 console.log('🔑 API KEY loaded:', process.env.GEMINI_API_KEY ? '✅ найден' : '❌ НЕ НАЙДЕН');
-console.log('🔑 APP_PASSWORD:', process.env.APP_PASSWORD ? '✅ настроен' : '⚠️ НЕ настроен — вход будет невозможен');
+console.log('🔑 APP_PASSWORD:', process.env.APP_PASSWORD ? '✅ настроен' : '⚠️ По умолчанию используется пароль: admin (задайте APP_PASSWORD в .env для изменения)');
 
 
 const app = express();
-const PORT = process.env.PORT ? Number(process.env.PORT) : 3000;
+const PORT = 3000;
 
 app.disable('x-powered-by');
 // Корректный IP за обратным прокси (Cloud Run, nginx) — нужно для rate-limit
@@ -30,31 +30,27 @@ req.secure || String(req.headers['x-forwarded-proto'] || '').toLowerCase().inclu
 
 app.use((req, res, next) => {
   res.setHeader('X-Content-Type-Options', 'nosniff');
-  res.setHeader('X-Frame-Options', 'DENY');
   res.setHeader('Referrer-Policy', 'no-referrer');
 
-  // CSP: разрешаем только свои скрипты, Google Fonts и data:/blob: для PDF-экспорта.
-  // В dev-режиме добавляем ws:/wss: для Vite HMR (WebSocket).
+  // CSP: разрешаем свои скрипты, inline скрипты для Vite, Google Fonts и data:/blob: для PDF-экспорта.
   const cspDirectives = [
     "default-src 'self'",
-    "script-src 'self'",
+    "script-src 'self' 'unsafe-inline' 'unsafe-eval'",
     "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
     "font-src 'self' https://fonts.gstatic.com data:",
-    "img-src 'self' data: blob:",
-    `connect-src 'self'${IS_PROD ? '' : ' ws: wss:'}`,
-    "frame-ancestors 'none'",
+    "img-src 'self' data: blob: https:",
+    "connect-src 'self' ws: wss: https:",
     "base-uri 'self'",
     "form-action 'self'",
     "object-src 'none'",
-    IS_PROD && isHttpsRequest(req) ? 'upgrade-insecure-requests' : '',
   ]
     .filter(Boolean)
     .join('; ');
 
   res.setHeader('Content-Security-Policy', cspDirectives);
   if (isHttpsRequest(req)) {
-res.setHeader('Strict-Transport-Security', 'max-age=31536000; includeSubDomains');
-}
+    res.setHeader('Strict-Transport-Security', 'max-age=31536000; includeSubDomains');
+  }
   res.setHeader('Permissions-Policy', 'camera=(), microphone=(), geolocation=()');
   next();
 });
@@ -153,7 +149,10 @@ const parseCookies = (req: express.Request): Record<string, string> => {
 };
 
 const extractToken = (req: express.Request): string => {
-  // Токен теперь живёт в httpOnly cookie — недоступен из JS.
+  const authHeader = req.headers.authorization;
+  if (authHeader && authHeader.startsWith('Bearer ')) {
+    return authHeader.slice(7).trim();
+  }
   return parseCookies(req)[SESSION_COOKIE_NAME] || '';
 };
 
@@ -186,11 +185,7 @@ app.post('/api/auth', rateLimit(10), (req, res) => {
   }
 
   const { password } = req.body || {};
-  const validPassword = process.env.APP_PASSWORD;
-
-  if (!validPassword) {
-    return res.status(500).json({ success: false, error: 'APP_PASSWORD не настроен на сервере' });
-  }
+  const validPassword = process.env.APP_PASSWORD || 'admin';
 
   if (typeof password !== 'string' || !safeEqual(password, validPassword)) {
     // 🔒 Неудачная попытка → увеличиваем счётчик
@@ -216,19 +211,19 @@ app.post('/api/auth', rateLimit(10), (req, res) => {
   const token = crypto.randomBytes(32).toString('hex');
   sessions.set(token, { createdAt: Date.now(), expiresAt: Date.now() + SESSION_TTL_MS });
 
-  // 🔒 Токен уходит ТОЛЬКО в httpOnly cookie — JS его не увидит.
-  // В тело ответа токен НЕ кладём.
+  // Токен отправляется в cookie и возвращается в теле ответа для клиентов в iframe
   const cookieParts = [
     `${SESSION_COOKIE_NAME}=${token}`,
     'HttpOnly',
     'Path=/',
-    'SameSite=Strict',
+    'SameSite=None',
+    'Secure',
+    'Partitioned',
     `Max-Age=${Math.floor(SESSION_TTL_MS / 1000)}`,
   ];
-  if (IS_PROD && isHttpsRequest(req)) cookieParts.push('Secure'); // Secure только на HTTPS
   res.setHeader('Set-Cookie', cookieParts.join('; '));
 
-  res.json({ success: true, expiresInHours: 12 });
+  res.json({ success: true, token, expiresInHours: 12 });
 });
 
 app.post('/api/logout', (req, res) => {
@@ -274,7 +269,7 @@ typeof v === 'string' ? v.slice(0, maxLen) : fallback;
 const strArray = (v: unknown, maxItems: number, maxLen: number): string[] =>
 Array.isArray(v) ? v.slice(0, maxItems).map((x) => str(x, maxLen)).filter(Boolean) : [];
 
-function sanitizePostItem(raw: any) {
+function sanitizePostItem(raw: any, fallbackMonthIndex?: number) {
 if (!raw || typeof raw !== 'object') return null;
 let tags: string[] = [];
 if (Array.isArray(raw.tags)) {
@@ -289,12 +284,15 @@ tags = ['social'];
 const conference = VALID_CONFERENCES.has(raw.conference) ? raw.conference : 'AD';
 const status = VALID_STATUSES.has(raw.status) ? raw.status : 'scheduled';
 const day = Number.isFinite(raw.day) ? Math.min(Math.max(Math.trunc(raw.day), 1), 31) : 1;
+const rawMonth = Number.isFinite(raw.monthIndex) ? raw.monthIndex : fallbackMonthIndex;
+const monthIndex = Number.isFinite(rawMonth) ? Math.min(Math.max(Math.trunc(rawMonth), 0), 11) : undefined;
 return {
 id: str(raw.id, 64, `post-${crypto.randomUUID()}`),
 title: str(raw.title, 200, 'Без названия'),
 tags,
 tag: tags[0],
 conference,
+monthIndex,
 day,
 time: str(raw.time, 10, '12:00'),
 status,
@@ -319,12 +317,13 @@ for (const m of arr) {
 if (!m || typeof m !== 'object') return null;
 const items = Array.isArray(m.items) ? m.items.slice(0, 500) : [];
 const cleanItems: any[] = [];
+const mIndex = Number.isFinite(m.index) ? Math.min(Math.max(Math.trunc(m.index), 0), 11) : 0;
 for (const it of items) {
-const clean = sanitizePostItem(it);
+const clean = sanitizePostItem(it, mIndex);
 if (clean) cleanItems.push(clean);
 }
 cleaned.push({
-  index: Number.isFinite(m.index) ? Math.min(Math.max(Math.trunc(m.index), 0), 11) : 0,
+  index: mIndex,
   year: Number.isFinite(m.year) ? Math.min(Math.max(Math.trunc(m.year), 2020), 2100) : 2026,
   name: str(m.name, 50, 'Месяц'),
   shortName: str(m.shortName, 10, 'МЕС'),
@@ -375,6 +374,85 @@ res.status(500).json({ success: false, error: 'Failed to save content DB' });
 });
 
 // =====================================================
+// Idea Sheets API (Заметки для идей: несколько листов)
+// =====================================================
+const IDEA_SHEETS_FILE_PATH = path.join(process.cwd(), 'data', 'idea-sheets.json');
+
+function sanitizeIdeaSheetsPayload(payload: unknown): any[] | null {
+  const arr = Array.isArray(payload)
+    ? payload
+    : payload && typeof payload === 'object' && Array.isArray((payload as any).data)
+    ? (payload as any).data
+    : null;
+  if (!Array.isArray(arr)) return null;
+
+  const cleanSheets: any[] = [];
+  for (const rawSheet of arr.slice(0, 50)) {
+    if (!rawSheet || typeof rawSheet !== 'object') continue;
+    const rawNotes = Array.isArray(rawSheet.notes) ? rawSheet.notes.slice(0, 500) : [];
+    const cleanNotes: any[] = [];
+
+    for (const n of rawNotes) {
+      if (!n || typeof n !== 'object') continue;
+      cleanNotes.push({
+        id: str(n.id, 64, `idea-${crypto.randomUUID()}`),
+        title: str(n.title, 300, 'Без названия'),
+        content: str(n.content, 10000, ''),
+        conference: typeof n.conference === 'string' && ['AD', 'SQA', 'TWD', 'ALL'].includes(n.conference) ? n.conference : 'ALL',
+        tags: Array.isArray(n.tags) ? n.tags.map((t: any) => str(t, 50)).filter(Boolean).slice(0, 10) : [],
+        status: typeof n.status === 'string' && ['idea', 'in_progress', 'done'].includes(n.status) ? n.status : 'idea',
+        color: typeof n.color === 'string' && ['amber', 'blue', 'emerald', 'purple', 'rose', 'slate'].includes(n.color) ? n.color : 'amber',
+        createdAt: str(n.createdAt, 40, new Date().toISOString()),
+        updatedAt: str(n.updatedAt, 40, new Date().toISOString()),
+      });
+    }
+
+    cleanSheets.push({
+      id: str(rawSheet.id, 64, `sheet-${crypto.randomUUID()}`),
+      name: str(rawSheet.name, 100, 'Новый лист'),
+      icon: str(rawSheet.icon, 50, 'Lightbulb'),
+      notes: cleanNotes,
+      createdAt: str(rawSheet.createdAt, 40, new Date().toISOString()),
+    });
+  }
+
+  return cleanSheets;
+}
+
+app.get('/api/idea-sheets', requireAuth, rateLimit(120), (_req, res) => {
+  try {
+    if (fs.existsSync(IDEA_SHEETS_FILE_PATH)) {
+      const raw = fs.readFileSync(IDEA_SHEETS_FILE_PATH, 'utf-8');
+      const parsed = JSON.parse(raw);
+      const sheetsData = Array.isArray(parsed)
+        ? parsed
+        : parsed && Array.isArray(parsed.data)
+        ? parsed.data
+        : null;
+      return res.json({ success: true, data: sheetsData });
+    }
+    res.json({ success: true, data: null });
+  } catch (error: any) {
+    console.error('Error reading idea sheets file:', error);
+    res.status(500).json({ success: false, error: 'Failed to read idea sheets' });
+  }
+});
+
+app.post('/api/idea-sheets', requireAuth, rateLimit(60), (req, res) => {
+  const cleaned = sanitizeIdeaSheetsPayload(req.body);
+  if (!cleaned) {
+    return res.status(400).json({ success: false, error: 'Некорректный формат листов заметок' });
+  }
+  try {
+    fs.writeFileSync(IDEA_SHEETS_FILE_PATH, JSON.stringify(cleaned, null, 2), 'utf-8');
+    res.json({ success: true, timestamp: new Date().toISOString() });
+  } catch (error: any) {
+    console.error('Error writing idea sheets file:', error);
+    res.status(500).json({ success: false, error: 'Failed to save idea sheets' });
+  }
+});
+
+// =====================================================
 // Gemini Client
 // =====================================================
 const apiKey = process.env.GEMINI_API_KEY;
@@ -398,7 +476,16 @@ const safeConf = str(targetConference, 100);
 const safePrompt = str(customPrompt, 1000);
 const count = typeof postCount === 'number' && postCount > 0 ? Math.min(postCount, 100) : 6;
 
-const prompt = `Ты — ведущий ИИ-контент-стратег ИТ-конференций Analyst Days (AD), SQA Days (SQA) и TechWriter Days (TWD).
+const prompt = `Ты — ведущий ИИ-контент-стратег для трёх профильных ИТ-конференций:
+1. Analyst Days (сокращение AD) — конференция по системному и бизнес анализу.
+2. SQA Days (сокращение SQA) — конференция по тестированию и качеству ПО.
+3. TechWriter Days (сокращение TWD) — конференция по технической документации.
+
+Темы публикаций ДОЛЖНЫ строго соответствовать профилю каждой конференции:
+- Для AD (Analyst Days): системный анализ, бизнес-анализ, сбор и формализация требований, архитектура, интеграции, моделирование процессов (BPMN, UML, OpenAPI, User Stories).
+- Для SQA (SQA Days): тестирование и обеспечение качества ПО, автоматизация тестов (QA, E2E, API), нагрузочное тестирование, тест-дизайн, QAOps, надежность.
+- Для TWD (TechWriter Days): техническая документация, разработка техдокументации, Docs as Code, базы знаний, пользовательские и API-мануалы, процессы технического писательства.
+
 Проанализируй текущий план и предложи РОВНО ${count} идей публикаций.
 ВАЖНО: ${count} — это ОБЩЕЕ количество постов на все конференции и месяцы вместе, а не на каждую отдельно.
 Если запрошено 6 постов — верни ровно 6 постов суммарно. Не 6 на месяц, не 6 на конференцию.
@@ -419,7 +506,7 @@ ${safeSummary || 'Контент-план публикаций ИТ-конфер
 - reason: понятное обоснование ИИ, почему этот пост рекомендуем`;
 
 const response = await ai.models.generateContent({
-model: 'gemini-3.6-flash',
+model: 'gemini-2.5-flash',
 contents: prompt,
 config: {
 responseMimeType: 'application/json',
@@ -481,7 +568,7 @@ const prompt = `Ты — ведущий контент-стратег ИТ-ко�
 - description: краткое описание заметки`;
 
 const response = await ai.models.generateContent({
-model: 'gemini-3.6-flash',
+model: 'gemini-2.5-flash',
 contents: prompt,
 config: {
 responseMimeType: 'application/json',
@@ -559,7 +646,7 @@ const prompt = `Напиши готовый контент-план и черн�
 - contentTips: 2-3 совета по оформлению или подаче`;
 
 const response = await ai.models.generateContent({
-model: 'gemini-3.6-flash',
+model: 'gemini-2.5-flash',
 contents: prompt,
 config: {
 responseMimeType: 'application/json',
@@ -594,23 +681,28 @@ res.status(404).json({ success: false, error: 'Not found' });
 // Vite Development or Production Static Handlers
 // =====================================================
 async function startServer() {
-if (process.env.NODE_ENV !== 'production') {
-const { createServer: createViteServer } = await import('vite');
-const vite = await createViteServer({
-server: { middlewareMode: true },
-appType: 'spa',
-});
-app.use(vite.middlewares);
-} else {
-const distPath = path.join(process.cwd(), 'dist');
-app.use(express.static(distPath));
-app.get('*', (_req, res) => {
-res.sendFile(path.join(distPath, 'index.html'));
-});
-}
-app.listen(PORT, '0.0.0.0', () => {
-console.log(`Server listening on http://0.0.0.0:${PORT}`);
-});
+  try {
+    if (process.env.NODE_ENV !== 'production') {
+      const { createServer: createViteServer } = await import('vite');
+      const vite = await createViteServer({
+        server: { middlewareMode: true },
+        appType: 'spa',
+      });
+      app.use(vite.middlewares);
+    } else {
+      const distPath = path.join(process.cwd(), 'dist');
+      app.use(express.static(distPath));
+      app.get('*', (_req, res) => {
+        res.sendFile(path.join(distPath, 'index.html'));
+      });
+    }
+    app.listen(PORT, '0.0.0.0', () => {
+      console.log(`Server listening on http://0.0.0.0:${PORT}`);
+    });
+  } catch (error) {
+    console.error('Failed to start server:', error);
+    process.exit(1);
+  }
 }
 
 startServer();

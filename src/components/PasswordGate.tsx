@@ -23,12 +23,15 @@ try {
       const res = await fetch('/api/auth', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
         body: JSON.stringify({ password }),
       });
       const data = await res.json().catch(() => ({}));
 
-      // Токен приходит в httpOnly cookie — в ответе его нет и не нужно.
       if (res.ok && data.success) {
+        if (data.token) {
+          localStorage.setItem('session_token', data.token);
+        }
         setError(false);
         onSuccess();
         return;
@@ -50,21 +53,21 @@ setIsLoading(false);
 };
 
 return (
-<div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/95 backdrop-blur-md p-4 selection:bg-indigo-500 selection:text-white">
+<div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/95 backdrop-blur-md p-3 sm:p-4 selection:bg-indigo-500 selection:text-white overflow-y-auto">
 <div
-className={`w-full max-w-md bg-slate-900 border border-slate-800 rounded-3xl p-8 shadow-2xl space-y-6 text-slate-100 transition-transform ${
+className={`w-full max-w-md bg-slate-900 border border-slate-800 rounded-2xl sm:rounded-3xl p-5 sm:p-8 shadow-2xl space-y-5 sm:space-y-6 text-slate-100 transition-transform my-auto ${
 isAnimating ? 'animate-shake' : ''
 }`}
 >
 {/* Header Icon */}
-<div className="flex flex-col items-center text-center space-y-3">
-<div className="w-16 h-16 rounded-2xl bg-gradient-to-tr from-indigo-600 to-violet-500 flex items-center justify-center shadow-lg shadow-indigo-500/20 ring-4 ring-slate-800">
-<Lock className="w-8 h-8 text-white" />
+<div className="flex flex-col items-center text-center space-y-2.5 sm:space-y-3">
+<div className="w-14 h-14 sm:w-16 sm:h-16 rounded-xl sm:rounded-2xl bg-gradient-to-tr from-indigo-600 to-violet-500 flex items-center justify-center shadow-lg shadow-indigo-500/20 ring-4 ring-slate-800">
+<Lock className="w-7 h-7 sm:w-8 sm:h-8 text-white" />
 </div>
 <div>
-<h2 className="text-2xl font-black text-white tracking-tight">Доступ Защищен</h2>
+<h2 className="text-xl sm:text-2xl font-black text-white tracking-tight">Доступ Защищен</h2>
 <p className="text-xs text-slate-400 mt-1">
-Введите пароль доступа для просмотра контент-стратегии ИТ-Конференций 2026
+Введите пароль доступа (по умолчанию: <span className="text-indigo-400 font-mono font-semibold">admin</span>)
 </p>
 </div>
 </div>
